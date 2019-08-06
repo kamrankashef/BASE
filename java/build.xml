@@ -1,0 +1,68 @@
+<project name="baseapp" default="all">
+
+    <!-- Required to find build commons -->
+    <property environment="env"/>
+    <property name="build.commons.home" value="${env.BUILD_COMMONS_HOME}" />
+    <property name="build.commons.shared" value="${build.commons.home}/shared" />
+
+
+    <!-- Project specific properties -->
+    <property file="build.properties" />
+    <!-- Apply any overrides -->
+    <property file="build-commons-overrides.properties" />
+    <!-- Source the common properties -->
+    <property file="${build.commons.shared}/build.properties" />
+
+    <!-- Import the common build file -->
+    <import file="${build.commons.shared}/build.xml"/>
+
+    <target name="run"
+            depends="jar"
+            description="--> testing" >
+      <java classname="com.base.application.scratch.Sample"
+            fork="true"
+            failonerror="true"
+            classpathref="exec-classpath">
+          <arg value="${file_path}"/>
+      </java>
+    </target>
+
+    <!--   <taskdef resource="proguard/ant/task.properties" classpath="lib/proguard.jar" /> -->
+
+    <target name="err" depends="compile">
+			        <jar jarfile="${jar.path}">
+			            <fileset dir="${src.classes}" /> <!--  excludes="**/*.java"/> -->
+			            <fileset dir="src" /> <!--  includes="**/*.java"/> -->
+			 </jar>
+			 <copy file="${jar.path}" tofile="${user.home}/Desktop/netbeans-testing/BaseProjectType/release/modules/ext/base-clean.jar" />
+
+    </target>
+    <!--    <target name="obfuscate" depends="jar">
+       <proguard configuration="proguard.properties"
+                 allowaccessmodification="true"
+                 usemixedcaseclassnames="false"
+                 defaultpackage=""
+                 skipnonpubliclibraryclasses="true"
+                 printseeds="${build}/obfuscateseeds.txt"
+                 printusage="${build}/obfuscateusage.txt"
+                 printmapping="${build}/obfuscatemapping.txt">
+
+         <injar name="${jar.path}" />
+         <outjar name="${dist}/base-clean.jar" />
+         <libraryjar name="${java.home}/lib/rt.jar" />
+         <libraryjar name="${lib}" />
+      </proguard>
+      <copy file="${dist}/base-clean.jar" tofile="${user.home}/Desktop/netbeans-testing/BaseProjectType/release/modules/ext/base-clean.jar" />
+    </target> -->
+    <target name="meta-model"
+            depends="jar"
+            description="Model from Json">
+      <java classname="com.base.gen.MetaModel"
+            fork="true"
+            failonerror="true"
+            classpathref="exec-classpath">
+      </java>
+
+    </target>
+</project>
+

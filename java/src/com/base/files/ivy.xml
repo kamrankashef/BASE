@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+    <info organisation="org" module="mod" revision="1.0.0" status="release" publication="20200930010130"/>
+
+    <configurations>
+        <conf name="master" visibility="public" description="contains only the artifact published by this module itself, with no transitive dependencies"/>
+        <conf name="test" visibility="private" description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases."/>
+    </configurations>
+
+    <publications>
+        <artifact name="org" type="bundle" ext="jar" conf="master"/>
+    </publications>
+
+    <dependencies>
+       <dependency org="com.google.guava" name="guava" rev="19.0"/>
+       <dependency org="junit" name="junit" rev="4.12" conf="test->default"/>
+       <dependency org="org.jsoup" name="jsoup" rev="1.9.2" conf="master"/>
+       <dependency org="mysql" name="mysql-connector-java" rev="6.0.3" />
+    </dependencies>
+
+</ivy-module>

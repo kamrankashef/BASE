@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+    <info organisation="baseapp" module="baseapp" revision="1.0.0" status="release" publication="20140930010130"/>
+
+    <configurations>
+        <conf name="master" visibility="public" description="contains only the artifact published by this module itself, with no transitive dependencies"/>
+        <conf name="test" visibility="private" description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases."/>
+    </configurations>
+
+    <publications>
+        <artifact name="base-app" type="bundle" ext="jar" conf="master"/>
+    </publications>
+
+    <dependencies>
+        <dependency org="junit" name="junit" rev="4.11" conf="test->default"/>
+        <dependency org="com.kamserverutils" name="kam-server-utils" rev="1.0.15" />
+        <dependency org="com.google.guava" name="guava" rev="18.0" />
+        <dependency org="com.google.code.gson" name="gson" rev="2.3.1"/>
+        <dependency org="org.jsoup" name="jsoup" rev="1.10.1" conf="master"/>
+        <dependency org="org.yaml" name="snakeyaml" rev="1.17"/>
+	<dependency org="org.apache.commons" name="commons-csv" rev="1.5"/>
+        <!-- To get @org.openide.util.lookup.ServiceProvider --> 
+       <dependency org="org.codeartisans.thirdparties.swing" name="org-openide-util-lookup" rev="8.3.1"/>
+       <dependency org="org.apache.commons" name="commons-configuration2" rev="2.5"/>
+    </dependencies>
+
+</ivy-module>
