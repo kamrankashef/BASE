@@ -6,9 +6,7 @@ import com.base.gen.SourceBuilder;
 import com.base.model.AbstractModel;
 import java.util.Set;
 import java.util.TreeSet;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = DLMethodGenerator.class)
 public class GetAll implements DLMethodGenerator {
 
     @Override

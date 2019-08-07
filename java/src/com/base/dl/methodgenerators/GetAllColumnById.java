@@ -8,9 +8,7 @@ import com.base.model.PrimitiveField;
 import com.base.util.CaseConversion;
 import java.util.Set;
 import java.util.TreeSet;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = DLMethodGenerator.class)
 public class GetAllColumnById implements DLMethodGenerator {
 
     private PrimitiveField[] fields;

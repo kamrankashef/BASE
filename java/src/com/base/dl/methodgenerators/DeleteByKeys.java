@@ -8,9 +8,7 @@ import com.base.model.PrimitiveField;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = DLMethodGenerator.class)
 public class DeleteByKeys implements DLMethodGenerator {
 
     @Override

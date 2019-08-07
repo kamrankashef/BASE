@@ -11,9 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = ModelGen.ModelMethodGenerator.class)
 public class FromObjectMapGenerator implements ModelGen.ModelMethodGenerator {
 
     final boolean strictAttributeChecks;

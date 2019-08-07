@@ -7,9 +7,7 @@ import com.base.model.AbstractModel;
 import com.base.model.PrimitiveField;
 import java.util.Set;
 import java.util.TreeSet;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = DLMethodGenerator.class)
 public class GetDistinctColumn implements DLMethodGenerator {
 
     final PrimitiveField field;

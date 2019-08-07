@@ -1,9 +1,8 @@
 <project name="baseapp" default="all">
 
-    <!-- Required to find build commons -->
     <property environment="env"/>
-    <property name="build.commons.home" value="${env.BUILD_COMMONS_HOME}" />
-    <property name="build.commons.shared" value="${build.commons.home}/shared" />
+
+    <property name="build.commons.shared" value="./build_commons" />
 
 
     <!-- Project specific properties -->

@@ -5,9 +5,7 @@ import com.base.gen.SourceBuilder;
 import com.base.model.AbstractModel;
 import java.util.Collections;
 import java.util.Set;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service=ModelGen.ModelMethodGenerator.class)
 public class IsShell implements ModelGen.ModelMethodGenerator {
 
     @Override

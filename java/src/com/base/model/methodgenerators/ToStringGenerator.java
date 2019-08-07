@@ -7,9 +7,7 @@ import com.base.model.AbstractField;
 import com.base.model.AbstractModel;
 import java.util.Collections;
 import java.util.Set;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service=ModelMethodGenerator.class)
 public class ToStringGenerator implements ModelGen.ModelMethodGenerator {
 
     @Override

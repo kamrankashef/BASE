@@ -9,9 +9,7 @@ import com.base.model.methodgenerators.partials.AugmentedPartials;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = ModelGen.ModelMethodGenerator.class)
 public class AttributeAndTagElemHybridMethodGenerator implements ModelGen.ModelMethodGenerator {
 
     private final static String TAG_VALUE_PREFIX = "fromtag";

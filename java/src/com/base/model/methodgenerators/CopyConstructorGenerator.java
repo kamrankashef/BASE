@@ -6,9 +6,7 @@ import com.base.model.AbstractField;
 import com.base.model.AbstractModel;
 import java.util.Collections;
 import java.util.Set;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = ModelGen.ModelMethodGenerator.class)
 public class CopyConstructorGenerator implements ModelGen.ModelMethodGenerator {
 
     final AbstractField[] fieldsToInline;

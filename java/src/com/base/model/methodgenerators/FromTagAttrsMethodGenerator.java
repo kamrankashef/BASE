@@ -10,9 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = ModelGen.ModelMethodGenerator.class)
 public class FromTagAttrsMethodGenerator implements ModelGen.ModelMethodGenerator {
 
     final Function<String, String> elemSelector;

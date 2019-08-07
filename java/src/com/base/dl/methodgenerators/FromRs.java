@@ -7,9 +7,7 @@ import com.base.model.AbstractField;
 import com.base.model.AbstractModel;
 import java.util.Set;
 import java.util.TreeSet;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = DLMethodGenerator.class)
 public class FromRs implements DLMethodGenerator {
 
     @Override

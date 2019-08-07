@@ -9,9 +9,7 @@ import com.base.model.PrimitiveField;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = ModelGen.ModelMethodGenerator.class)
 public class DerivedModelConstructorGenerator implements ModelGen.ModelMethodGenerator {
 
     final String getUUID;

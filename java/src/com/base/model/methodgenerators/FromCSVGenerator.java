@@ -7,9 +7,7 @@ import com.base.model.PrimitiveField;
 import com.base.model.methodgenerators.partials.AugmentedPartials;
 import java.util.HashSet;
 import java.util.Set;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service = ModelGen.ModelMethodGenerator.class)
 public class FromCSVGenerator implements ModelGen.ModelMethodGenerator {
 
     @Override

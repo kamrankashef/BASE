@@ -8,9 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import org.openide.util.lookup.ServiceProvider;
 
-@ServiceProvider(service=ModelGen.ModelMethodGenerator.class)
 public class ToMapGenerator implements ModelGen.ModelMethodGenerator {
 
     @Override
