@@ -13,7 +13,6 @@
 
     <dependencies>
         <dependency org="junit" name="junit" rev="4.11" conf="test->default"/>
-        <dependency org="com.kamserverutils" name="kam-server-utils" rev="1.0.15" />
         <dependency org="com.google.guava" name="guava" rev="18.0" />
         <dependency org="com.google.code.gson" name="gson" rev="2.3.1"/>
         <dependency org="org.jsoup" name="jsoup" rev="1.10.1" conf="master"/>
