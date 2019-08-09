@@ -32,6 +32,10 @@ If additional details would be helpful, feel free to contact me as I am happy to
 ## Set up
 
 ```bash
+# Install Maven if needed
+# sudo apt-get install maven
+git clone git@github.com:kamrankashef/BASE.git
+cd BASE
 mvn compile
 ```
 
