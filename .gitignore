@@ -8,7 +8,5 @@ reports/
 build/
 dist/
 *.iml
-java/test
-java/src/com/baseutils
 scripts/misc
 target/
