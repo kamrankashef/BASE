@@ -37,5 +37,10 @@ If additional details would be helpful, feel free to contact me as I am happy to
 git clone git@github.com:kamrankashef/BASE.git
 cd BASE
 mvn compile
+mvn test
+# Ignore echoed exception, you will see:
+# https://github.com/kamrankashef/BASE/blob/master/src/test/resources/fromjson/application.json
+# Drive the creation of /tmp/capfriendly
+# Modify the application.json file, rerun mvn test and see you changes passed through
 ```
 
