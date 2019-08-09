@@ -1,0 +1,214 @@
+{
+  "name": "NHLContract",
+  "org": "com.msg",
+  "models": [
+    {
+      "name": "CapFriendlyPlayer",
+      "fields": [
+        {
+          "name": "elite_prospect_id",
+          "type": "LONG"
+        },
+        {
+          "name": "full_name",
+          "type": "TEXT"
+        },
+        {
+          "name": "team_name",
+          "type": "TEXT"
+        },
+        {
+          "name": "number",
+          "type": "INT"
+        },
+        {
+          "name": "birth_date_str",
+          "type": "TEXT"
+        },
+        {
+          "name": "height_str",
+          "type": "TEXT"
+        },
+        {
+          "name": "shoots",
+          "type": "TEXT"
+        },
+        {
+          "name": "age",
+          "type": "INT"
+        },
+        {
+          "name": "elc_signing_age",
+          "type": "INT"
+        },
+        {
+          "name": "waivers_signing_age",
+          "type": "INT"
+        },
+        {
+          "name": "draft_year",
+          "type": "INT"
+        },
+        {
+          "name": "drafted_overall",
+          "type": "INT"
+        },
+        {
+          "name": "draft_rount",
+          "type": "INT"
+        },
+        {
+          "name": "drafted_by",
+          "type": "TEXT"
+        }
+      ]
+    },
+    {
+      "name": "CapFriendlyContract",
+      "fields": [
+        {
+          "fk_model": "CapFriendlyPlayer",
+          "type": "fk"
+        },
+        {
+          "name": "type",
+          "type": "TEXT"
+        },
+        {
+          "name": "length_str",
+          "type": "TEXT"
+        },
+        {
+          "name": "expiry_status",
+          "type": "TEXT"
+        },
+        {
+          "name": "signing_team",
+          "type": "TEXT"
+        },
+        {
+          "name": "value",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ch",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "signing_date",
+          "type": "TIMESTAMP"
+        }
+      ]
+    },
+    {
+      "name": "CapFriendlyContractYear",
+      "fields": [
+        {
+          "fk_model": "CapFriendlyContract",
+          "type": "fk"
+        },
+        {
+          "name": "season",
+          "type": "TEXT"
+        },
+        {
+          "name": "clause",
+          "type": "TEXT"
+        },
+        {
+          "name": "cap_hit",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "avv",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "s_bonus",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "p_bonus",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "nhl_salary",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "ahl_salary",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "clause",
+          "type": "MEDIUM_TEXT"
+        }
+      ]
+    },
+    {
+      "name": "CapFriendlyStatByYear",
+      "fields": [
+        {
+          "fk_model": "CapFriendlyPlayer",
+          "type": "fk"
+        },
+        {
+          "name": "season",
+          "type": "TEXT"
+        },
+        {
+          "name": "team",
+          "type": "TEXT"
+        },
+        {
+          "name": "league",
+          "type": "TEXT"
+        },
+        {
+          "name": "gp",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "g",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "a",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "tp",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "pim",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "playoffs",
+          "type": "TEXT"
+        },
+        {
+          "name": "playoffs_gp",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "playoffs_g",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "playoffs_a",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "playoffs_tp",
+          "type": "DOUBLE"
+        },
+        {
+          "name": "playoffs_pim",
+          "type": "DOUBLE"
+        }
+      ]
+    }
+  ]
+}

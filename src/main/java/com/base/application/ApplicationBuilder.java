@@ -41,6 +41,7 @@ public class ApplicationBuilder {
             final Configuration config = configs.properties(new File(propsPath));
             BASE_HOME = config.getString("base.home");
         } catch (Exception ex) {
+            System.err.println("Fix this -- exception getting thrown on tests");
             ex.printStackTrace();
         }
     }
