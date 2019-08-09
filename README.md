@@ -32,8 +32,6 @@ If additional details would be helpful, feel free to contact me as I am happy to
 ## Set up
 
 ```bash
-cd java
-ant resolve
-ant compile
+mvn compile
 ```
 
