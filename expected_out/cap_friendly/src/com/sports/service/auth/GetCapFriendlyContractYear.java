@@ -1,7 +1,7 @@
-package com.msg.service.auth;
+package com.sports.service.auth;
 
-import com.msg.model.CapFriendlyContractYear;
-import com.msg.datalayer.CapFriendlyContractYearDL;
+import com.sports.model.CapFriendlyContractYear;
+import com.sports.datalayer.CapFriendlyContractYearDL;
 import com.kamserverutils.common.exec.ErrorType;
 import com.kamserverutils.common.exec.ExecutionResult;
 import com.kamserverutils.common.util.ServiceUtil;

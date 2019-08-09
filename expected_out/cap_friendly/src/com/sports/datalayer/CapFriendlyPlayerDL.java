@@ -1,6 +1,6 @@
-package com.msg.datalayer;
+package com.sports.datalayer;
 
-import com.msg.model.CapFriendlyPlayer;
+import com.sports.model.CapFriendlyPlayer;
 import common.DBUtil;
 import common.ErrorType;
 import common.ExecutionResult;

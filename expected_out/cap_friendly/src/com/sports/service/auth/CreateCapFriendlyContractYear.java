@@ -1,7 +1,7 @@
-package com.msg.service.auth;
+package com.sports.service.auth;
 
-import com.msg.model.CapFriendlyContractYear;
-import com.msg.datalayer.CapFriendlyContractYearDL;
+import com.sports.model.CapFriendlyContractYear;
+import com.sports.datalayer.CapFriendlyContractYearDL;
 import com.kamserverutils.common.exec.ErrorType;
 import com.kamserverutils.common.exec.ExecutionResult;
 import com.kamserverutils.common.util.ServiceUtil;
@@ -14,21 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 
 // Auto-generated
-@WebServlet("/api/update_cap_friendly_contract_year")
-final public class UpdateCapFriendlyContractYear extends AuthenticatedServlet { 
+@WebServlet("/api/create_cap_friendly_contract_year")
+final public class CreateCapFriendlyContractYear extends AuthenticatedServlet { 
 
-    private static final Logger LOGGER = Logger.getLogger(UpdateCapFriendlyContractYear.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(CreateCapFriendlyContractYear.class.getName());
 
     @Override
     protected Map<String, Object> doGetBody(
         final HttpServletRequest req,
         final HttpServletResponse resp)
         throws Exception {
-
-        final String capFriendlyContractYearUuid = (String)  req.getParameter("cap_friendly_contract_year_uuid");
-        if(StringUtil.isNullOrEmptyStr(capFriendlyContractYearUuid)) {
-            return ServiceUtil.messageMap(new ErrorType("cap_friendly_contract_year_uuid_missing", "CapFriendlyContractYearUuid is a required field"));
-        }
 
         final String capFriendlyContractGuid = (String)  req.getParameter("cap_friendly_contract_guid");
         if(StringUtil.isNullOrEmptyStr(capFriendlyContractGuid)) {
@@ -44,8 +39,7 @@ final public class UpdateCapFriendlyContractYear extends AuthenticatedServlet {
         final String season = (String)  req.getParameter("season");
 
         try (final Connection conn = getNoAutoCommitConnection()) {
-            final ExecutionResult<CapFriendlyContractYear> er = CapFriendlyContractYearDL.update(conn
-                , capFriendlyContractYearUuid
+            final ExecutionResult<CapFriendlyContractYear> er = CapFriendlyContractYearDL.create(conn
                 , capFriendlyContractGuid
                 , ahl_salary
                 , avv

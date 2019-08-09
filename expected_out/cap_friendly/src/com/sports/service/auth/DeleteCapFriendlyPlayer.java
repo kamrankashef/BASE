@@ -1,7 +1,7 @@
-package com.msg.service.auth;
+package com.sports.service.auth;
 
-import com.msg.model.CapFriendlyStatByYear;
-import com.msg.datalayer.CapFriendlyStatByYearDL;
+import com.sports.model.CapFriendlyPlayer;
+import com.sports.datalayer.CapFriendlyPlayerDL;
 import com.kamserverutils.common.exec.ErrorType;
 import com.kamserverutils.common.exec.ExecutionResult;
 import com.kamserverutils.common.util.ServiceUtil;
@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 
 // Auto-generated
-@WebServlet("/api/delete_cap_friendly_stat_by_year")
-final public class DeleteCapFriendlyStatByYear extends AuthenticatedServlet { 
+@WebServlet("/api/delete_cap_friendly_player")
+final public class DeleteCapFriendlyPlayer extends AuthenticatedServlet { 
 
-    private static final Logger LOGGER = Logger.getLogger(DeleteCapFriendlyStatByYear.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(DeleteCapFriendlyPlayer.class.getName());
 
     @Override
     protected Map<String, Object> doGetBody(
@@ -25,15 +25,15 @@ final public class DeleteCapFriendlyStatByYear extends AuthenticatedServlet {
         final HttpServletResponse resp)
         throws Exception {
 
-        final String capFriendlyStatByYearUuid = (String)  req.getParameter("cap_friendly_stat_by_year_uuid");
-        if(StringUtil.isNullOrEmptyStr(capFriendlyStatByYearUuid)) {
-            return ServiceUtil.messageMap(new ErrorType("cap_friendly_stat_by_year_uuid_missing", "CapFriendlyStatByYearUuid is a required field"));
+        final String capFriendlyPlayerUuid = (String)  req.getParameter("cap_friendly_player_uuid");
+        if(StringUtil.isNullOrEmptyStr(capFriendlyPlayerUuid)) {
+            return ServiceUtil.messageMap(new ErrorType("cap_friendly_player_uuid_missing", "CapFriendlyPlayerUuid is a required field"));
         }
 
 
         try (final Connection conn = getNoAutoCommitConnection()) {
-            final ExecutionResult<Void> er = CapFriendlyStatByYearDL.delete(conn
-                , capFriendlyStatByYearUuid);
+            final ExecutionResult<Void> er = CapFriendlyPlayerDL.delete(conn
+                , capFriendlyPlayerUuid);
             if(er.isError()) {
                 conn.rollback();
                 return ServiceUtil.messageMap(er.errorMsg());

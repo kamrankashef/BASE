@@ -1,6 +1,6 @@
 {
   "name": "NHLContract",
-  "org": "com.msg",
+  "org": "com.sports",
   "models": [
     {
       "name": "CapFriendlyPlayer",

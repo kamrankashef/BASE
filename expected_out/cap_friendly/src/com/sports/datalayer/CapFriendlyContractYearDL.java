@@ -1,6 +1,6 @@
-package com.msg.datalayer;
+package com.sports.datalayer;
 
-import com.msg.model.CapFriendlyContractYear;
+import com.sports.model.CapFriendlyContractYear;
 import common.DBUtil;
 import common.ErrorType;
 import common.ExecutionResult;

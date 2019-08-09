@@ -1,4 +1,4 @@
-package com.msg.model;
+package com.sports.model;
 
 import common.ServiceUtil;
 import common.TypeExtract;

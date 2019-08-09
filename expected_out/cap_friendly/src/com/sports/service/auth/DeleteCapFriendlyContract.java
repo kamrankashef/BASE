@@ -1,7 +1,7 @@
-package com.msg.service.auth;
+package com.sports.service.auth;
 
-import com.msg.model.CapFriendlyPlayer;
-import com.msg.datalayer.CapFriendlyPlayerDL;
+import com.sports.model.CapFriendlyContract;
+import com.sports.datalayer.CapFriendlyContractDL;
 import com.kamserverutils.common.exec.ErrorType;
 import com.kamserverutils.common.exec.ExecutionResult;
 import com.kamserverutils.common.util.ServiceUtil;
@@ -14,10 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 
 // Auto-generated
-@WebServlet("/api/delete_cap_friendly_player")
-final public class DeleteCapFriendlyPlayer extends AuthenticatedServlet { 
+@WebServlet("/api/delete_cap_friendly_contract")
+final public class DeleteCapFriendlyContract extends AuthenticatedServlet { 
 
-    private static final Logger LOGGER = Logger.getLogger(DeleteCapFriendlyPlayer.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(DeleteCapFriendlyContract.class.getName());
 
     @Override
     protected Map<String, Object> doGetBody(
@@ -25,15 +25,15 @@ final public class DeleteCapFriendlyPlayer extends AuthenticatedServlet {
         final HttpServletResponse resp)
         throws Exception {
 
-        final String capFriendlyPlayerUuid = (String)  req.getParameter("cap_friendly_player_uuid");
-        if(StringUtil.isNullOrEmptyStr(capFriendlyPlayerUuid)) {
-            return ServiceUtil.messageMap(new ErrorType("cap_friendly_player_uuid_missing", "CapFriendlyPlayerUuid is a required field"));
+        final String capFriendlyContractUuid = (String)  req.getParameter("cap_friendly_contract_uuid");
+        if(StringUtil.isNullOrEmptyStr(capFriendlyContractUuid)) {
+            return ServiceUtil.messageMap(new ErrorType("cap_friendly_contract_uuid_missing", "CapFriendlyContractUuid is a required field"));
         }
 
 
         try (final Connection conn = getNoAutoCommitConnection()) {
-            final ExecutionResult<Void> er = CapFriendlyPlayerDL.delete(conn
-                , capFriendlyPlayerUuid);
+            final ExecutionResult<Void> er = CapFriendlyContractDL.delete(conn
+                , capFriendlyContractUuid);
             if(er.isError()) {
                 conn.rollback();
                 return ServiceUtil.messageMap(er.errorMsg());

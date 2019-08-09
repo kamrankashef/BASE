@@ -1,7 +1,7 @@
-package com.msg.service.auth;
+package com.sports.service.auth;
 
-import com.msg.model.CapFriendlyStatByYear;
-import com.msg.datalayer.CapFriendlyStatByYearDL;
+import com.sports.model.CapFriendlyStatByYear;
+import com.sports.datalayer.CapFriendlyStatByYearDL;
 import com.kamserverutils.common.exec.ErrorType;
 import com.kamserverutils.common.exec.ExecutionResult;
 import com.kamserverutils.common.util.ServiceUtil;
@@ -14,16 +14,21 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 
 // Auto-generated
-@WebServlet("/api/create_cap_friendly_stat_by_year")
-final public class CreateCapFriendlyStatByYear extends AuthenticatedServlet { 
+@WebServlet("/api/update_cap_friendly_stat_by_year")
+final public class UpdateCapFriendlyStatByYear extends AuthenticatedServlet { 
 
-    private static final Logger LOGGER = Logger.getLogger(CreateCapFriendlyStatByYear.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UpdateCapFriendlyStatByYear.class.getName());
 
     @Override
     protected Map<String, Object> doGetBody(
         final HttpServletRequest req,
         final HttpServletResponse resp)
         throws Exception {
+
+        final String capFriendlyStatByYearUuid = (String)  req.getParameter("cap_friendly_stat_by_year_uuid");
+        if(StringUtil.isNullOrEmptyStr(capFriendlyStatByYearUuid)) {
+            return ServiceUtil.messageMap(new ErrorType("cap_friendly_stat_by_year_uuid_missing", "CapFriendlyStatByYearUuid is a required field"));
+        }
 
         final String capFriendlyPlayerGuid = (String)  req.getParameter("cap_friendly_player_guid");
         if(StringUtil.isNullOrEmptyStr(capFriendlyPlayerGuid)) {
@@ -45,7 +50,8 @@ final public class CreateCapFriendlyStatByYear extends AuthenticatedServlet {
         final Double tp = (String)  req.getParameter("tp");
 
         try (final Connection conn = getNoAutoCommitConnection()) {
-            final ExecutionResult<CapFriendlyStatByYear> er = CapFriendlyStatByYearDL.create(conn
+            final ExecutionResult<CapFriendlyStatByYear> er = CapFriendlyStatByYearDL.update(conn
+                , capFriendlyStatByYearUuid
                 , capFriendlyPlayerGuid
                 , a
                 , g
