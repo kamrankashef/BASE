@@ -1,23 +1,21 @@
 package samples.csv;
 
-import com.base.application.ApplicationBuilder;
-import com.base.dl.methodgenerators.*;
-import com.base.gen.DLGen;
-import com.base.gen.ModelGen;
-import com.base.model.*;
-import com.base.model.methodgenerators.ConstructorGenerator;
-import com.base.model.methodgenerators.FromCSVGenerator;
-import com.base.parsergen.AbstractBuilderFromSource;
-import com.base.parsergen.CSVBuilder;
-import com.base.parsergen.csv.CSVParserGenerator;
-import com.base.parsergen.rules.*;
-import com.base.parsergen.rules.impl.StatefulTypeSetGuesser;
-import com.base.parsergen.rules.training.SourceFilesFromClasspathYaml;
-import com.base.parsergen.rules.training.SourceFilesI;
-import com.base.util.AdjoinModelUtil;
-import com.base.workflow.Helpers;
+import base.application.ApplicationBuilder;
+import base.dl.methodgenerators.*;
+import base.gen.DLGen;
+import base.gen.ModelGen;
+import base.model.*;
+import base.model.methodgenerators.ConstructorGenerator;
+import base.model.methodgenerators.FromCSVGenerator;
+import base.parsergen.AbstractBuilderFromSource;
+import base.parsergen.CSVBuilder;
+import base.parsergen.csv.CSVParserGenerator;
+import base.parsergen.rules.*;
+import base.parsergen.rules.impl.StatefulTypeSetGuesser;
+import base.parsergen.rules.training.SourceFilesFromClasspathYaml;
+import base.parsergen.rules.training.SourceFilesI;
+import base.util.AdjoinModelUtil;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 

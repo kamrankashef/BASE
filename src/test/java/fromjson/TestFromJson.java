@@ -1,19 +1,19 @@
 package fromjson;
 
-import com.base.application.ApplicationBuilder;
-import com.base.application.ApplicationDescription;
-import com.base.dl.methodgenerators.FromRs;
-import com.base.dl.methodgenerators.GetByGuid;
-import com.base.dl.methodgenerators.InsertObject;
-import com.base.dl.methodgenerators.InsertRaw;
-import com.base.gen.JSAPIGen;
-import com.base.gen.SchemaGen;
-import com.base.model.AbstractModel;
-import com.base.model.methodgenerators.ConstructorGenerator;
-import com.base.model.methodgenerators.FromThirdPartyGenerator;
-import com.base.model.methodgenerators.ToStringGenerator;
-import com.base.workflow.Helpers;
-import com.kamserverutils.common.util.FileUtil;
+import base.application.ApplicationBuilder;
+import base.application.ApplicationDescription;
+import base.dl.methodgenerators.FromRs;
+import base.dl.methodgenerators.GetByGuid;
+import base.dl.methodgenerators.InsertObject;
+import base.dl.methodgenerators.InsertRaw;
+import base.gen.JSAPIGen;
+import base.gen.SchemaGen;
+import base.model.AbstractModel;
+import base.model.methodgenerators.ConstructorGenerator;
+import base.model.methodgenerators.FromThirdPartyGenerator;
+import base.model.methodgenerators.ToStringGenerator;
+import base.workflow.Helpers;
+import kamserverutils.common.util.FileUtil;
 import fullsuite.FullSuite;
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ public class TestFromJson {
 
         final String exportDir = "/tmp/capfriendly";
 
-        com.base.util.FileUtil.deleteDir(new File(exportDir));
+        base.util.FileUtil.deleteDir(new File(exportDir));
 
         final String pathToJson = Helpers.classToTestPath(TestFromJson.class, "fromjson/application.json");
         final String asJson = FileUtil.fileToString(pathToJson);

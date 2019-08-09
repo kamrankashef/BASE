@@ -1,12 +1,12 @@
 package fullsuite;
 
-import com.base.model.methodgenerators.FromCSVGeneratorDeprecated;
-import com.base.gen.ModelGen;
-import com.base.model.methodgenerators.ConstructorGenerator;
-import com.base.parsergen.AbstractBuilderFromSource;
-import com.base.parsergen.DeprecatedDelimitedBuilder;
-import com.base.parsergen.csv.DeprecatedCSVParserGenerator;
-import com.base.parsergen.rules.ParseRuleSet;
+import base.model.methodgenerators.FromCSVGeneratorDeprecated;
+import base.gen.ModelGen;
+import base.model.methodgenerators.ConstructorGenerator;
+import base.parsergen.AbstractBuilderFromSource;
+import base.parsergen.DeprecatedDelimitedBuilder;
+import base.parsergen.csv.DeprecatedCSVParserGenerator;
+import base.parsergen.rules.ParseRuleSet;
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;

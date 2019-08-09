@@ -15,12 +15,12 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        //com.base.model.TestAdjoinedModel.class,
-        //com.base.model.TestModel.class,
-        //com.base.model.TestPrimitiveFields.class,
-        //com.base.model.TestSpecialConstructor.class,
-        //com.base.util.CaseConversionTest.class,
-        //com.base.util.StringUtilTest.class,
+        //base.model.TestAdjoinedModel.class,
+        //base.model.TestModel.class,
+        //base.model.TestPrimitiveFields.class,
+        //base.model.TestSpecialConstructor.class,
+        //base.util.CaseConversionTest.class,
+        //base.util.StringUtilTest.class,
         TestFromJson.class,
 })
 public class FullSuite {

@@ -1,38 +1,34 @@
 package fullsuite;
 
-import com.base.application.ApplicationBuilder;
-import com.base.dl.methodgenerators.InsertObject;
-import com.base.dl.methodgenerators.InsertRaw;
-import com.base.gen.DLGen;
-import com.base.gen.ModelGen;
-import com.base.parsergen.rules.ModelAugmenterI;
-import com.base.parsergen.rules.ModelTransformerI;
-import com.base.parsergen.rules.SourceFiles;
-import com.base.parsergen.rules.TypeRenamerI;
-import com.base.parsergen.rules.TypeSetsI;
-import com.base.parsergen.XMLBuilder;
-import com.base.model.AbstractModel;
-import com.base.model.Constraint;
-import com.base.model.PrimitiveField;
-import com.base.model.methodgenerators.AttributeBasedFromElemMethodGenerator;
-import com.base.model.methodgenerators.ConstructorGenerator;
-import com.base.model.methodgenerators.DerivedModelConstructorGenerator;
-import com.base.parsergen.AbstractBuilderFromSource;
-import com.base.parsergen.rules.ParseRuleSet;
-import com.base.parsergen.rules.training.SourceFilesI;
-import com.base.util.FileUtil;
+import base.application.ApplicationBuilder;
+import base.dl.methodgenerators.InsertObject;
+import base.dl.methodgenerators.InsertRaw;
+import base.gen.DLGen;
+import base.gen.ModelGen;
+import base.parsergen.rules.ModelAugmenterI;
+import base.parsergen.rules.ModelTransformerI;
+import base.parsergen.rules.TypeRenamerI;
+import base.parsergen.rules.TypeSetsI;
+import base.parsergen.XMLBuilder;
+import base.model.AbstractModel;
+import base.model.Constraint;
+import base.model.PrimitiveField;
+import base.model.methodgenerators.AttributeBasedFromElemMethodGenerator;
+import base.model.methodgenerators.ConstructorGenerator;
+import base.model.methodgenerators.DerivedModelConstructorGenerator;
+import base.parsergen.AbstractBuilderFromSource;
+import base.parsergen.rules.ParseRuleSet;
+import base.parsergen.rules.training.SourceFilesI;
+import base.util.FileUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.base.workflow.Helpers;
 import org.junit.Test;
-import org.yaml.snakeyaml.Yaml;
 
 public abstract class XMLGenTest {
 
