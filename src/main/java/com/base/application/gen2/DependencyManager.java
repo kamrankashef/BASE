@@ -1,4 +1,4 @@
-package com.base.appliation.gen2;
+package com.base.application.gen2;
 
 import com.base.gen.SourceBuilder;
 import com.base.model.MetaObject;

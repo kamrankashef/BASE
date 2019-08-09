@@ -1,4 +1,4 @@
-package com.base.appliation.gen2;
+package com.base.application.gen2;
 
 import com.base.gen.DLGen;
 import com.base.gen.ModelGen;

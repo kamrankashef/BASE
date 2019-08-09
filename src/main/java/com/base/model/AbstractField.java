@@ -1,6 +1,6 @@
 package com.base.model;
 
-import com.base.appliation.gen2.ApplicationSettings;
+import com.base.application.gen2.ApplicationSettings;
 import com.base.util.CaseConversion;
 import com.google.gson.annotations.SerializedName;
 import java.util.HashSet;
