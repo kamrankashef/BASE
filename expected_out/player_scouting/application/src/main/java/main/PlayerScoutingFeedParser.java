@@ -9,11 +9,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-common.InitDatabase;
-import playerscouting.model.PlayerScoutingFeed
+import common.InitDatabase;
+import playerscouting.model.PlayerScoutingFeed;
 
 public class PlayerScoutingFeedParser {
 
@@ -27,7 +28,7 @@ public class PlayerScoutingFeedParser {
         try (Connection conn = InitDatabase.getConnection(false)) {
 
             for (CSVRecord record : records) {
-                final PlayerScoutingFeed playerScoutingFeed = PlayerScoutingFeed.fromCSVRecord(headers, record);
+                final PlayerScoutingFeed playerScoutingFeed = PlayerScoutingFeed.fromRow(record);
             }
             conn.commit();
         }

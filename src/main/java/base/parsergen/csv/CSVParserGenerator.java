@@ -28,15 +28,16 @@ public class CSVParserGenerator {
                 .appendln("import java.sql.SQLException;")
                 .appendln("import java.util.HashMap;")
                 .appendln("import java.util.Map;")
+                .appendln("import java.util.Set;")
                 .appendln("import org.apache.commons.csv.CSVFormat;")
                 .appendln("import org.apache.commons.csv.CSVParser;")
                 .appendln("import org.apache.commons.csv.CSVRecord;")
-                .append(FileI.COMMON_PKG)
-                .appendln(".InitDatabase;");
+                .append("import ").append(FileI.COMMON_PKG).appendln(".InitDatabase;");
 
         bldr
                 .append("import ")
-                .appendlnln(elemModel.getCanonicalName(parentPackage));
+                .append(elemModel.getCanonicalName(parentPackage))
+                .appendlnln(";");
 
         bldr.append("public class ").append(parserName).appendlnln(" {");
         bldr.appendlnln(1, "public static void main(final String ... args) throws Exception {")
@@ -52,7 +53,11 @@ public class CSVParserGenerator {
         bldr.append(4, elemModel.toJavaDeclaration())
                 .append(" = ")
                 .append(elemModel.getJavaClassName())
-                .appendln(".fromCSVRecord(headers, record);");
+                .appendln(".fromRow(record);");
+                // TODO Keep a link between the Elem models and the derived Models so the master parsers can be auto-gened
+                // Including the persist call can't be done cleanly at the moment
+                //.append(4, elemModel.dlName())
+                //.appendln(".insert(").append(elemModel.toJavaVariableName()).append(");");
         bldr.appendln(3, "}")
                 .appendln(3, "conn.commit();")
                 .appendln(2, "}")

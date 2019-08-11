@@ -94,7 +94,7 @@ final public class CSVBuilder extends AbstractBuilderFromSource {
                     parserName,
                     models.values().iterator().next());
 
-            genedParsers.put("src/main/" + parserName + ".java", genParser);
+            genedParsers.put("src/main/java/main/" + parserName + ".java", genParser);
 
             mainsBuildXML.add(AbstractBuilderFromSource.createAntTarget(target,
                     "main." + parserName,
