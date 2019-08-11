@@ -1,4 +1,0 @@
----
-rootDir: .
-sourceFiles:
-- {fileName: sample-export.csv, type: RealGMFeed}

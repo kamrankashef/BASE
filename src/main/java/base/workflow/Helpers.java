@@ -1,27 +1,31 @@
 package base.workflow;
 
 import base.parsergen.rules.SourceFiles;
+import kamserverutils.common.util.IOUtil;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 
+/**
+ * TODO This needs to be refactored and deep cleaned.
+ */
 public class Helpers {
 
-    public static String absolutePathToPackage(final Class clazz, final String file) {
+    public static String absolutePathToPackage(final Class clazz, final String fileName) {
         final String pathToPackage = clazz.getPackage().getName().replace(".", "/");
-        System.out.println(pathToPackage);
-        final String pathToFile = clazz.getClassLoader().getResource(pathToPackage + "/" + file).getFile();
-        return pathToFile.substring(0, pathToFile.length() - file.length() - 1);
+        final String path =  pathToPackage + "/" + fileName;
+        return new File(clazz.getClassLoader().getResource(path).getFile()).getParent();
+    }
+
+
+    // Why "test" in prefix
+    public static String resourceAsString(final Class clazz, final String fileName) throws IOException {
+        return IOUtil.inputStreamToString(clazz.getClassLoader().getResourceAsStream(fileName));
     }
 
     public static String classToTestPath(final Class clazz, final String fileName) {
         final String pathToPackage = clazz.getPackage().getName().replace(".", "/");
-        System.out.println(pathToPackage);
         final String path = "target/test-classes/" + pathToPackage + "/" + fileName;
-        System.out.println(path);
         final String pathToFile = clazz.getClassLoader().getResource(fileName).getFile();
         return pathToFile;
     }

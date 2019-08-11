@@ -54,6 +54,7 @@ public abstract class AbstractBuilderFromSource {
         return FileUtil.fileToString(fileName);
     }
 
+    @Deprecated
     protected static String createAntTarget(final String target,
             final String className,
             final String parserName,

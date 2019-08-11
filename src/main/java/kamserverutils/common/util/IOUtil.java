@@ -1,7 +1,10 @@
 package kamserverutils.common.util;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
@@ -11,22 +14,23 @@ final public class IOUtil {
 
     private IOUtil() {
     }
-    
+
     public static void inputStreamToFile(final InputStream input,
-            final String fileName) throws IOException, FileNotFoundException {
-        try(final FileOutputStream fos = new FileOutputStream(fileName)) {
+                                         final String fileName) throws IOException, FileNotFoundException {
+        try (final FileOutputStream fos = new FileOutputStream(fileName)) {
             copyStream(input, fos);
         }
     }
-    
+
     public static void fileToOutputStream(final String path,
-            final OutputStream ops) throws IOException, FileNotFoundException {
-        try(final FileInputStream fos = new FileInputStream(path)) {
+                                          final OutputStream ops) throws IOException, FileNotFoundException {
+        try (final FileInputStream fos = new FileInputStream(path)) {
             copyStream(fos, ops);
         }
     }
+
     public static void copyStream(final InputStream input,
-            final OutputStream output)
+                                  final OutputStream output)
             throws IOException {
         byte[] buffer = new byte[1024]; // Adjust if you want
         int bytesRead;
@@ -35,6 +39,7 @@ final public class IOUtil {
         }
         output.flush();
     }
+
     private static final Logger LOGGER = Logger.getLogger(IOUtil.class.getName());
 
     public static void attemptClose(final Socket socket) {
@@ -93,29 +98,8 @@ final public class IOUtil {
         }
     }
 
-    public static String inputStreamToString(final InputStream is) {
-
-        BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
-
-        String line;
-        try {
-
-            br = new BufferedReader(new InputStreamReader(is));
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            IOUtil.attemptClose(br);
-        }
-
-        return sb.toString();
+    public static String inputStreamToString(final InputStream is) throws IOException {
+        return IOUtils.toString(is, Charset.forName("UTF-8"));
     }
 
-//	public static void drainIOStream(final InputStream is, final OutputStream os)  {
-//		
-//	}
 }

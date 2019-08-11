@@ -1,8 +1,10 @@
 package base.files;
 
 import base.files.common.DBUtil;
-import base.files.org.test.EmptyTest;
+import kamserverutils.common.util.IOUtil;
+
 import static base.util.StreamUtil.getProjectFile;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -35,12 +37,6 @@ final public class FileI {
         return "test/" + getEmptyTestPackage(org).replaceAll("\\.", "/") + "/" + EMPTY_TEST + ".java";
     }
 
-    public static String getEmptyTestFile(final String org) throws IOException {
-        final String asClass = getProjectFile(EmptyTest.class.getPackage().getName().replaceAll("\\.", "/")
-                + "/" + EMPTY_TEST_TXT);
-
-        return pkgReplacement(asClass, getEmptyTestPackage(org));
-    }
 
     private static String pkgReplacement(final String fileAsString, final String packageName) {
         final StringBuilder asBuilder = new StringBuilder();
@@ -58,25 +54,6 @@ final public class FileI {
         return asBuilder.toString();
     }
 
-    public static String getBuildXML() throws IOException {
-        return getProjectFile(FileI.class.getPackage().getName().replaceAll("\\.", "/")
-                + "/" + FileI.BUILD_FILE_PATH);
-    }
-
-    public static String getBuildProperties() throws IOException {
-        return getProjectFile(FileI.class.getPackage().getName().replaceAll("\\.", "/")
-                + "/" + FileI.BUILD_PROPERTIES_PATH);
-    }
-
-    public static String getIvySettings() throws IOException {
-        return getProjectFile(FileI.class.getPackage().getName().replaceAll("\\.", "/")
-                + "/" + FileI.IVY_SETTINGS_PATH);
-    }
-
-    public static String getIvy() throws IOException {
-        return getProjectFile(FileI.class.getPackage().getName().replaceAll("\\.", "/")
-                + "/" + FileI.IVY_PATH);
-    }
 
     public static String COMMON_PKG = "common";
 
@@ -127,16 +104,46 @@ final public class FileI {
         return map;
     }
 
+
+    /**
+     * Collect all of the resources in rootResourceDir and collect them as Strings in pathToFilesAsString.
+     * @param pathToFilesAsString
+     * @param rootResourceDir
+     * @param currentResourceDir
+     * @throws IOException
+     */
+    private static void getResourceFolderFiles(final Map<String, String> pathToFilesAsString,
+                                                              String rootResourceDir,
+                                                              String currentResourceDir) throws IOException {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        URL url = loader.getResource(currentResourceDir);
+        String path = url.getPath();
+        for(final File resourceFile : new File(path).listFiles()) {
+            final String childPath = resourceFile.getPath();
+            final String addOnPath = childPath.substring(path.length() + 1);
+            final String resoucePath = currentResourceDir + "/" + addOnPath;
+            if(resourceFile.isDirectory()) {
+                getResourceFolderFiles(pathToFilesAsString, rootResourceDir, resoucePath);
+            } else {
+                final String genedResourcePath = resoucePath.substring(rootResourceDir.length() + 1);
+                pathToFilesAsString.put(genedResourcePath, IOUtil.inputStreamToString(FileI.class.getClassLoader().getResourceAsStream(resoucePath)));
+            }
+        }
+    }
+
+
+    /**
+     * Collect the boilerplate build files for the generated Maven project
+     *
+     * @param org
+     * @return
+     * @throws IOException
+     */
     public static Map<String, String> allBuildFile(final String org) throws IOException {
         final Map<String, String> map = new HashMap<>();
 
-        map.put(BUILD_FILE_PATH, getBuildXML());
-        map.put(BUILD_PROPERTIES_PATH, getBuildProperties());
-        map.put(IVY_SETTINGS_PATH, getIvySettings());
-        map.put(IVY_PATH, getIvy());
+        getResourceFolderFiles(map, "mvn_scaffolding", "mvn_scaffolding");
 
-        // EmptyTest
-        map.put(getEmptyTestFileExportPath(org), getEmptyTestFile(org));
         map.putAll(allCommonFile());
         return map;
     }

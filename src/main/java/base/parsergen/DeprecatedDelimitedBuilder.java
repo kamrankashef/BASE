@@ -6,9 +6,8 @@ import base.model.PrimitiveField;
 import base.model.PrimitiveType;
 import base.parsergen.csv.DelimitedParserGenerator;
 import base.parsergen.rules.ParseRuleSet;
-import base.parsergen.rules.training.SourceFilesI;
+import base.parsergen.rules.SourceFiles;
 import com.google.common.base.Splitter;
-import kamserverutils.common.util.IOUtil;
 import kamserverutils.common.util.StringUtil;
 import java.io.IOException;
 import java.util.Collection;
@@ -42,11 +41,13 @@ final public class DeprecatedDelimitedBuilder extends AbstractBuilderFromSource 
     @Override
     protected void process() throws IOException {
 
-        for (final SourceFilesI.SourceFileI sourceFile : parseRuleSet.sourceFiles.getFiles()) {
+        for (final SourceFiles.SourceFile sourceFile : parseRuleSet.sourceFiles.sourceFiles) {
 
-            final String fileAsStr = IOUtil.inputStreamToString(sourceFile.getSourceFile());
+            final String fileAsStr = sourceFileToString(
+                    parseRuleSet.sourceFiles.rootDir,
+                    sourceFile);
 
-            final String modelName = sourceFile.getType();
+            final String modelName = sourceFile.type;
 
             final String[] rows = fileAsStr.split("\n");
             final String[] originalColNames = rows[0].split(delimitedParserGenerator.getSplitExpression());
@@ -86,7 +87,7 @@ final public class DeprecatedDelimitedBuilder extends AbstractBuilderFromSource 
             mainsBuildXML.add(AbstractBuilderFromSource.createAntTarget(target,
                     "main." + parserName,
                     parserName,
-                    sourceFile.getType() + " parser",
+                    sourceFile.type + " parser",
                     "compile,check-jdbc-url",
                     Collections.singletonList("${xml.file}"),
                     Collections.singletonList("JDBC_CONNECTION_STRING=${jdbc.connection.string}")));

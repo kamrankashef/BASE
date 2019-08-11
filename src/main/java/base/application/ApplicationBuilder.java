@@ -36,9 +36,7 @@ public class ApplicationBuilder {
     static {
         try {
             final Configurations configs = new Configurations();
-            final String propsPath = System.getenv("BASE_PROPS_PATH");
-            final Configuration config = configs.properties(new File(propsPath));
-            BASE_HOME = config.getString("base.home");
+            BASE_HOME = System.getProperty("user.dir");
         } catch (Exception ex) {
             System.err.println("Fix this -- exception getting thrown on tests");
             ex.printStackTrace();
@@ -97,7 +95,7 @@ public class ApplicationBuilder {
     private final ApplicationDescription application;
 
     public boolean buildAPI = true;
-    final private String srcDir = "src";
+    final private String srcDir = "src/main/java";
 
     public ApplicationBuilder(final ApplicationDescription application) {
         this.application = application;
@@ -120,7 +118,9 @@ public class ApplicationBuilder {
 
                 }
             }
-            classes.put(this.srcDir + "/" + m.getModelPackage().replaceAll("\\.", "/") + "/" + m.getJavaClassName() + ".java", ModelGen.toModelClass(m));
+            final String destPath = this.srcDir + "/"
+                + m.getModelPackage().replaceAll("\\.", "/") + "/" + m.getJavaClassName() + ".java";
+            classes.put(destPath, ModelGen.toModelClass(m));
         }
         for (final AbstractModel m : application.models) {
             if (!m.getDLMethodGenerators().isEmpty()) {
@@ -168,12 +168,12 @@ public class ApplicationBuilder {
         final ApplicationDescription app = new ApplicationDescription("application", org, modelsToExport);
         ApplicationBuilder appBldr = new ApplicationBuilder(app);
         appBldr.buildAPI = false;
+        System.out.println("Building classes");
         final Map<String, String> genFiles = appBldr.buildClasses();
         genFiles.putAll(FileI.allBuildFile(app.org));
 
         final Collection<AbstractModel> schemaModels = new LinkedList<>();
         schemaModels.addAll(modelsToExport);
-        genFiles.put("build_mains.xml", mainsBuildXML);
 
         final SchemaGen schemaGen = new SchemaGen(SchemaGen.DBVendor.MYSQL);
         final String schema = schemaGen.buildSchema(app.name.toLowerCase(), schemaModels);

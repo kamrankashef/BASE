@@ -1,9 +1,9 @@
 package base.parsergen;
 
+import base.parsergen.rules.SourceFiles.SourceFile;
 import base.model.AbstractModel;
 import base.model.Model;
 import base.parsergen.rules.ParseRuleSet;
-import base.parsergen.rules.training.SourceFilesI;
 import base.parsergen.xml.XMLToModels;
 import base.parsergen.xml.XMLParserGenerator;
 import base.parsergen.xml.ModelHierarchy;
@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
-import kamserverutils.common.util.IOUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
@@ -24,7 +22,7 @@ import org.jsoup.parser.Parser;
 // 2 - ModelAugmenterI instance (implementation defined in the exported project)
 // 3 - ModelTransformerI instance (implementation defined in the exported project)
 // 4 - TypeSetsI instance (implementation defined in the exported project)
-// Project is - 
+// Project is -
 final public class XMLBuilder extends AbstractBuilderFromSource {
 
     private final XMLToModels scanner;
@@ -40,13 +38,15 @@ final public class XMLBuilder extends AbstractBuilderFromSource {
         final StringBuilder buildMains = new StringBuilder();
         buildMains.append("<project name=\"build_mains\" basedir=\".\" >\n\n");
 
-        for (final SourceFilesI.SourceFileI sourceFile : parseRuleSet.sourceFiles.getFiles()) {
+        for (final SourceFile sourceFile : parseRuleSet.sourceFiles.sourceFiles) {
 
             final ModelHierarchy xsdNesting;
 
             { // File to doc
-                final String xml = IOUtil.inputStreamToString(sourceFile.getSourceFile());
-
+                // TODO Use IOUtils
+                final String xml = sourceFileToString(
+                        parseRuleSet.sourceFiles.rootDir,
+                        sourceFile);
                 final Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
                 xsdNesting = new ModelHierarchy(new Model("XML", Collections.EMPTY_LIST, Collections.EMPTY_LIST, parseRuleSet.org ), "FOO");
                 scanner.createTypeDefs(xsdNesting, doc);
@@ -54,7 +54,7 @@ final public class XMLBuilder extends AbstractBuilderFromSource {
             }
 
             // XML Parser
-            final String parserName = sourceFile.getType() + "Parser";
+            final String parserName = sourceFile.type + "Parser";
             final String target = parserName;
 
             final String genParser = XMLParserGenerator.createNoOpParser(xsdNesting, parserName, scanner.models.values());
@@ -63,7 +63,7 @@ final public class XMLBuilder extends AbstractBuilderFromSource {
             buildMains.append(AbstractBuilderFromSource.createAntTarget(target,
                     "main." + parserName,
                     parserName,
-                    sourceFile.getType() + " parser",
+                    sourceFile.type + " parser",
                     "compile,check-jdbc-url",
                     Collections.singletonList("${xml.file}"),
                     Collections.singletonList("JDBC_CONNECTION_STRING=${jdbc.connection.string}")));

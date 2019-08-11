@@ -6,12 +6,11 @@ import base.model.PrimitiveField;
 import base.model.PrimitiveType;
 import base.parsergen.csv.CSVParserGenerator;
 import base.parsergen.rules.ParseRuleSet;
-import base.parsergen.rules.training.SourceFilesI;
+import base.parsergen.rules.SourceFiles;
+import base.workflow.Helpers;
 import kamserverutils.common.util.StringUtil;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -49,11 +48,14 @@ final public class CSVBuilder extends AbstractBuilderFromSource {
     @Override
     protected void process() throws IOException {
 
-        for (final SourceFilesI.SourceFileI sourceFile : parseRuleSet.sourceFiles.getFiles()) {
+        // TODO The source files concept needs to be reexamined
+        for (final SourceFiles.SourceFile sourceFile : parseRuleSet.sourceFiles.sourceFiles) {
 
-            final String modelName = sourceFile.getType();
+            final String modelName = sourceFile.type;
 
-            final Reader in = new InputStreamReader(sourceFile.getSourceFile());
+            final String resourcePath = parseRuleSet.sourceFiles.rootDir + "/" + sourceFile.fileName;
+            System.out.println("resource path: " + resourcePath);
+            final Reader in = new InputStreamReader(sourceFile.getInputStream());//new FileReader(parseRuleSet.sourceFiles.rootDir + "/" + sourceFile.fileName);
             final CSVParser records = CSVFormat.EXCEL.withHeader().parse(in);
             final Set<String> headers = records.getHeaderMap().keySet();
 
@@ -61,7 +63,7 @@ final public class CSVBuilder extends AbstractBuilderFromSource {
             final AbstractModel model = new Model(modelName, parseRuleSet.org);
             List<CSVRecord> recordsList = records.getRecords();
             int rowCount = (int)recordsList.size();
-            
+
             for (final String originalColName : headers) {
 
                 final String newColName = parseRuleSet.typeRenamer.rename(originalColName);
@@ -97,7 +99,7 @@ final public class CSVBuilder extends AbstractBuilderFromSource {
             mainsBuildXML.add(AbstractBuilderFromSource.createAntTarget(target,
                     "main." + parserName,
                     parserName,
-                    sourceFile.getType() + " parser",
+                    sourceFile.type + " parser",
                     "compile,check-jdbc-url",
                     Collections.singletonList("${xml.file}"),
                     Collections.singletonList("JDBC_CONNECTION_STRING=${jdbc.connection.string}")));

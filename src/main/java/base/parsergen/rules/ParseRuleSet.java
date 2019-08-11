@@ -2,8 +2,6 @@ package base.parsergen.rules;
 
 import base.gen.ModelGen;
 import base.model.Constraint;
-import base.parsergen.rules.training.SourceFilesI;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
@@ -17,7 +15,7 @@ public class ParseRuleSet {
     public final TypeSetsI typeSets;
 
     public final Set<ModelGen.ModelMethodGenerator> elemModelMethods;
-    public final SourceFilesI sourceFiles;
+    public final SourceFiles sourceFiles;
     public final boolean allowMissingAttributes;
     public final Set<Constraint> defaultConstraints;
 
@@ -27,7 +25,7 @@ public class ParseRuleSet {
             final Set<ModelGen.ModelMethodGenerator> elemModelMethods,
             final TypeSetsI typeSets,
             final String exportDir,
-            final SourceFilesI sourceFiles) {
+            final SourceFiles sourceFiles) {
         this(org, modelAugmenter, elemModelMethods,
                 typeSets,
                 TypeRenamerI.DEFAULT_RENAMER,
@@ -43,7 +41,7 @@ public class ParseRuleSet {
             final Set<ModelGen.ModelMethodGenerator> elemModelMethods,
             final TypeSetsI typeSets,
             final TypeRenamerI renamer,
-            final SourceFilesI sourceFiles) throws IOException {
+            final SourceFiles sourceFiles) throws IOException {
         this(org, modelAugmenter, elemModelMethods,
                 typeSets,
                 renamer,
@@ -59,7 +57,7 @@ public class ParseRuleSet {
             final Set<ModelGen.ModelMethodGenerator> elemModelMethods,
             final TypeSetsI typeSets,
             final TypeRenamerI renamer,
-            final SourceFilesI sourceFiles,
+            final SourceFiles sourceFiles,
             final boolean allowMissingAttributes,
             final Set<Constraint> defaultConstraints) {
         this.org = org;

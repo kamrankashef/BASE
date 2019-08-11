@@ -1,0 +1,4 @@
+---
+rootDir: base/parsegen/csv/playerscouting
+sourceFiles:
+- {fileName: sample-export.csv, type: PlayerScoutingFeed}

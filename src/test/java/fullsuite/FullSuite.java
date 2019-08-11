@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.fail;
 
+import base.parsegen.csv.playerscouting.TestPlayerScoutingCSV;
 import fromjson.TestFromJson;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -22,6 +23,7 @@ import org.junit.runners.Suite;
         //base.util.CaseConversionTest.class,
         //base.util.StringUtilTest.class,
         TestFromJson.class,
+        TestPlayerScoutingCSV.class,
 })
 public class FullSuite {
 

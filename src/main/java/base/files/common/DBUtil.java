@@ -184,7 +184,7 @@ final public class DBUtil {
         count++;
     }
 
-    public void setNullableTimestamp(final java.util.Date val) throws SQLException {
+    public void setNullableTimestamp(final Date val) throws SQLException {
         if (val == null) {
             ps.setNull(count, java.sql.Types.TIMESTAMP);
         } else {

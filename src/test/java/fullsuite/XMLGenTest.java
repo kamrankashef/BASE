@@ -7,6 +7,7 @@ import base.gen.DLGen;
 import base.gen.ModelGen;
 import base.parsergen.rules.ModelAugmenterI;
 import base.parsergen.rules.ModelTransformerI;
+import base.parsergen.rules.SourceFiles;
 import base.parsergen.rules.TypeRenamerI;
 import base.parsergen.rules.TypeSetsI;
 import base.parsergen.XMLBuilder;
@@ -18,17 +19,16 @@ import base.model.methodgenerators.ConstructorGenerator;
 import base.model.methodgenerators.DerivedModelConstructorGenerator;
 import base.parsergen.AbstractBuilderFromSource;
 import base.parsergen.rules.ParseRuleSet;
-import base.parsergen.rules.training.SourceFilesI;
 import base.util.FileUtil;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
+import base.workflow.Helpers;
 import org.junit.Test;
+import org.yaml.snakeyaml.Yaml;
+
 
 public abstract class XMLGenTest {
 
@@ -44,9 +44,24 @@ public abstract class XMLGenTest {
 
     public abstract ModelTransformerI getModelTransformerI();
 
-    protected SourceFilesI getSourceFiles() throws FileNotFoundException {
-        throw new RuntimeException("This needs to get converted");
-        // return Helpers.classToTestDir(this.getClass(), getYAMLSource());
+    protected SourceFiles getSourceFiles() throws IOException {
+        final String yamlAsString = Helpers.resourceAsString(getClass(),getYAMLSource());
+        final Map<String, Object> config = (Map<String, Object>) new Yaml().load(yamlAsString);
+        final String rootDir = (String) config.get("rootDir");
+        final SourceFiles sourceFiles = new SourceFiles(rootDir);
+
+        for(final Map<String, String> sourceFileAsMap : (Collection<Map<String, String>>) config.get("sourceFiles")) {
+
+            final String fileName = sourceFileAsMap.get("fileName");
+            final String type = sourceFileAsMap.get("type");
+
+            sourceFiles.addSourceFile(fileName, type, () -> {
+                final String resourcePath = rootDir + "/" + fileName;
+                return XMLGenTest.class.getClassLoader().getResourceAsStream(resourcePath);
+            });
+        }
+
+        return sourceFiles;
     }
 
     protected AbstractBuilderFromSource getBuilder() throws IOException {
