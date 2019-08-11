@@ -58,7 +58,7 @@ final public class XMLBuilder extends AbstractBuilderFromSource {
             final String target = parserName;
 
             final String genParser = XMLParserGenerator.createNoOpParser(xsdNesting, parserName, scanner.models.values());
-            genedParsers.put("src/main/" + parserName + ".java", genParser);
+            genedParsers.put("src/main/java/main/" + parserName + ".java", genParser);
 
             buildMains.append(AbstractBuilderFromSource.createAntTarget(target,
                     "main." + parserName,
