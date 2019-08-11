@@ -1,9 +1,10 @@
+BASE is a Java to Java ETL code generator alternative to ORM and enterprise ETL.
+BASE is focused on providing complete execution  transparency and control.
 
-## Overview
+BASE can analyze several data formats (e.g. XML, Json or delimited), infer its structure and create a corresponding SQL table
+definition, parsers, class objects and data-layer classes.  The user has be ability to override default behavior such as
+how objects and attributes are named, typing and combining/mutating objects and fields in custom ways.
 
-BASE is a Java to Java ETL code generator alternative to ORM and enterprise ETL.  BASE is focused on providing complete execution  transparency and control.
-
-BASE can examine a simple data input (XML, Json or delimited) infer its structure and from it create a SQL table definition, parsers, class objects and data-layer classes.  The user has be ability to override default behavior such as how objects and attributes are named, typing and combining/mutating objects and fields in custom ways.
 
 ## Simple Example
 
@@ -36,10 +37,9 @@ methods, SQL schemas, REST API CRUD endpoints and API clients. BASE’s output s
 extensible allowing the operator to choose from predefined artifact types as well operator defined artifacts.
 
 #### Phase 4 - Code Generation
-BASE’s output is a operational, self-contained software project including all of the
+BASE’s output is an operational, self-contained software project including all of the
 SQL definitions, parsers, models, data layers, API endpoints and clients required to perform ETL on the data of
 the form referenced in Phase 1 reflecting the operator specifications in Phase 2 and Phase 3.
-If additional details would be helpful, feel free to contact me as I am happy to provide clarification.
 
 ## Set up
 
@@ -55,4 +55,13 @@ mvn test
 # Drive the creation of /tmp/capfriendly
 # Modify the application.json file, rerun mvn test and see you changes passed through
 ```
+The test target generates the sample applications in `expected_out`.  Running and modifying the test cases are a great
+place to start learning BASE.
 
+## What's next
+
+- Additional regression testing
+- Use an SQL table as the data source
+- BASE is due for a clean up to make it easier to work with for new users
+- Add support for multiple target languages, starting with Python
+- A GUI
