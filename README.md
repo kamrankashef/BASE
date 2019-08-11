@@ -9,7 +9,10 @@ BASE can examine a simple data input (XML, Json or delimited) infer its structur
 
 In [the Player Scouting example](https://github.com/kamrankashef/BASE/blob/master/src/test/java/base/parsegen/csv/playerscouting/TestPlayerScoutingCSV.java), we are given an a [CSV document](https://github.com/kamrankashef/BASE/blob/master/src/test/resources/base/parsegen/csv/playerscouting/sample-export.csv) with over 40 fields.  A little custom behavior is specified, such as adding date-typed verions of some fields in `getModelAugmenterI`, using a special naming functions that can convert field names like `Shot %` to `shot_p` and specify `playerscouting` as the name of our desired export package.
 
-Running the test provides this [Maven application](https://github.com/kamrankashef/BASE/tree/master/expected_out/player_scouting/application).  The user can the go into the [generated parser](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/PlayerScoutingFeedParser.java) and determine where to invoke the `insert` method from the [generated persistence-layer](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/java/playerscouting/derived/datalayer/PlayerScoutingDL.java)
+Running the test provides this [Maven application](https://github.com/kamrankashef/BASE/tree/master/expected_out/player_scouting/application).
+The user can the go into the [generated parser](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/java/main/PlayerScoutingFeedParser.java)
+and determine where to invoke the `insert` method from the 
+[generated persistence-layer](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/java/playerscouting/derived/datalayer/PlayerScoutingDL.java).
 
 
 ## Phases
