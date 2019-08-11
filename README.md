@@ -3,7 +3,16 @@
 
 BASE is a Java to Java ETL code generator alternative to ORM and enterprise ETL.  BASE is focused on providing complete execution  transparency and control.
 
-## Summary
+BASE can examine a simple data input (XML, Json or delimited) infer its structure and from it create a SQL table definition, parsers, class objects and data-layer classes.  The user has be ability to override default behavior such as how objects and attributes are named, typing and combining/mutating objects and fields in custom ways.
+
+## Simple Example
+
+In [the Player Scouting example](https://github.com/kamrankashef/BASE/blob/master/src/test/java/base/parsegen/csv/playerscouting/TestPlayerScoutingCSV.java), we are giving an a [CSV document](https://github.com/kamrankashef/BASE/blob/master/src/test/resources/base/parsegen/csv/playerscouting/sample-export.csv) with over 40 fields.  A little custom behavior is specified, such as adding date-typed verions of some fields in `getModelAugmenterI`, using a special naming functions that can convert field names like `Shot %` to `shot_p` and specify `playerscouting` as the name of our desired export package.
+
+Running the test provides this [Maven application](https://github.com/kamrankashef/BASE/tree/master/expected_out/player_scouting/application).  The user can the go into the [generated parser](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/PlayerScoutingFeedParser.java) and determine where to invoke the `insert` method from the [generated persistence-layer](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/java/playerscouting/derived/datalayer/PlayerScoutingDL.java)
+
+
+## Phases
 
 BASE is a data management tool that automates the creation of ETL software with four primary
 phases of execution:
