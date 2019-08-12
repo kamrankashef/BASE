@@ -5,6 +5,27 @@ BASE can analyze several data formats (e.g. XML, Json or delimited), infer its s
 definition, parsers, class objects and data-layer classes.  The user has be ability to override default behavior such as
 how objects and attributes are named, typing and combining/mutating objects and fields in custom ways.
 
+- [Setup](#setup)
+- [Simple Example](#simple-example)
+- [What's Coming Next](#whats-coming-next)
+- [Execution Phases](#execution-phases)
+
+## Setup
+
+```bash
+# Install Maven if needed
+# sudo apt-get install maven
+git clone git@github.com:kamrankashef/BASE.git
+cd BASE
+mvn compile
+mvn test
+# Ignore echoed exception, you will see:
+# https://github.com/kamrankashef/BASE/blob/master/src/test/resources/fromjson/application.json
+# Drive the creation of /tmp/capfriendly
+# Modify the application.json file, rerun mvn test and see you changes passed through
+```
+The test target generates the sample applications in `expected_out`.  Running and modifying the test cases are a great
+place to start learning BASE.
 
 ## Simple Example
 
@@ -15,8 +36,15 @@ The user can the go into the [generated parser](https://github.com/kamrankashef/
 and determine where to invoke the `insert` method from the 
 [generated persistence-layer](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/java/playerscouting/derived/datalayer/PlayerScoutingDL.java).
 
+## What's Coming Next
 
-## Phases
+- Additional regression testing
+- Use an SQL table as the data source
+- BASE is due for a clean up to make it easier to work with for new users
+- Add support for multiple target languages, starting with Python
+- A GUI
+
+## Phases of Execution
 
 BASE is a data management tool that automates the creation of ETL software with four primary
 phases of execution:
@@ -41,27 +69,3 @@ BASE’s output is an operational, self-contained software project including all
 SQL definitions, parsers, models, data layers, API endpoints and clients required to perform ETL on the data of
 the form referenced in Phase 1 reflecting the operator specifications in Phase 2 and Phase 3.
 
-## Set up
-
-```bash
-# Install Maven if needed
-# sudo apt-get install maven
-git clone git@github.com:kamrankashef/BASE.git
-cd BASE
-mvn compile
-mvn test
-# Ignore echoed exception, you will see:
-# https://github.com/kamrankashef/BASE/blob/master/src/test/resources/fromjson/application.json
-# Drive the creation of /tmp/capfriendly
-# Modify the application.json file, rerun mvn test and see you changes passed through
-```
-The test target generates the sample applications in `expected_out`.  Running and modifying the test cases are a great
-place to start learning BASE.
-
-## What's next
-
-- Additional regression testing
-- Use an SQL table as the data source
-- BASE is due for a clean up to make it easier to work with for new users
-- Add support for multiple target languages, starting with Python
-- A GUI
