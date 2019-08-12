@@ -8,7 +8,7 @@ how objects and attributes are named, typing and combining/mutating objects and 
 - [Setup](#setup)
 - [Simple Example](#simple-example)
 - [What's Coming Next](#whats-coming-next)
-- [Execution Phases](#execution-phases)
+- [Phases of Execution](#phases-of-execution)
 
 ## Setup
 
