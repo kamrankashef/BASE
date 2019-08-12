@@ -1,12 +1,7 @@
-java/expected_out
-project_scratch_space
+scripts/project_scratch_space/
 .*.swp
 .idea/
 .DS_Store
-lib/
-reports/
-build/
-dist/
 *.iml
 scripts/misc
 target/
