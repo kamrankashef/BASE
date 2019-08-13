@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+
+import kamserverutils.common.util.IOUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
@@ -44,9 +46,7 @@ final public class XMLBuilder extends AbstractBuilderFromSource {
 
             { // File to doc
                 // TODO Use IOUtils
-                final String xml = sourceFileToString(
-                        parseRuleSet.sourceFiles.rootDir,
-                        sourceFile);
+                final String xml = IOUtil.inputStreamToString(sourceFile.getInputStream());
                 final Document doc = Jsoup.parse(xml, "", Parser.xmlParser());
                 xsdNesting = new ModelHierarchy(new Model("XML", Collections.EMPTY_LIST, Collections.EMPTY_LIST, parseRuleSet.org ), "FOO");
                 scanner.createTypeDefs(xsdNesting, doc);

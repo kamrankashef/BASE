@@ -46,6 +46,8 @@ public abstract class AbstractBuilderFromSource {
 
     abstract protected void process() throws IOException;
 
+    // This should all be handled by sourceFile.getInputStream()
+    @Deprecated
     protected final String sourceFileToString(final String rootDir,
             final SourceFile sourceFile) throws IOException {
         final String fileName = rootDir + "/" + sourceFile.fileName;
