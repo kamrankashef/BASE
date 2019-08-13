@@ -6,7 +6,9 @@ definition, parsers, class objects and data-layer classes.  The user has be abil
 how objects and attributes are named, typing and combining/mutating objects and fields in custom ways.
 
 - [Setup](#setup)
-- [Simple Example](#simple-example)
+- [Examples](#examples)
+  - [CSV Parser](#csv-parser)
+  - [XML Parser](#xml-parser)
 - [What's Coming Next](#whats-coming-next)
 - [Phases of Execution](#phases-of-execution)
 
@@ -27,14 +29,62 @@ mvn test
 The test target generates the sample applications in `expected_out`.  Running and modifying the test cases are a great
 place to start learning BASE.
 
-## Simple Example
+## Examples
 
-In [the Player Scouting example](https://github.com/kamrankashef/BASE/blob/master/src/test/java/base/parsegen/csv/playerscouting/TestPlayerScoutingCSV.java), we are given an a [CSV document](https://github.com/kamrankashef/BASE/blob/master/src/test/resources/base/parsegen/csv/playerscouting/sample-export.csv) with over 40 fields.  A little custom behavior is specified, such as adding date-typed verions of some fields in `getModelAugmenterI`, using a special naming functions that can convert field names like `Shot %` to `shot_p` and specify `playerscouting` as the name of our desired export package.
+The examples are shown through BASE's [parse generator regression test suite](https://github.com/kamrankashef/BASE/tree/master/src/test/java/base/parsegen).
+
+The tests can be modified to create newly generated ETL applications.  The most interesting methods to redefine are
+
+- `getOrg` which lets you specify your target package name (e.g. `com.yourcompany.etl`)
+- `getModelTransformerI` which allows you to modify, create and combine models.
+
+- `getYAMLSource` which is where in the resource directory your config file can be found.  This file specifies where
+ your example data file is located.
+
+When you modify a test, the test will break because the output will not match what is expected.
+
+By default, your project will get exported to a Maven project in `/tmp/project_test_out/application`.
+Calling `mvn compile` will verify your code's consistency.  You can modify the target directory by
+overriding `public String getExportDir()` in the Test.
+
+
+
+#### CSV Parser
+The [the Player Scouting example](https://github.com/kamrankashef/BASE/blob/master/src/test/java/base/parsegen/csv/playerscouting/TestPlayerScoutingCSV.java), we are given an a [CSV document](https://github.com/kamrankashef/BASE/blob/master/src/test/resources/base/parsegen/csv/playerscouting/sample-export.csv) with over 40 fields.  A little custom behavior is specified, such as adding date-typed verions of some fields in `getModelAugmenterI`, using a special naming functions that can convert field names like `Shot %` to `shot_p` and specify `playerscouting` as the name of our desired export package.
 
 Running the test provides this [Maven application](https://github.com/kamrankashef/BASE/tree/master/expected_out/player_scouting/application).
 The user can the go into the [generated parser](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/java/main/PlayerScoutingFeedParser.java)
 and determine where to invoke the `insert` method from the 
 [generated persistence-layer](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/java/playerscouting/derived/datalayer/PlayerScoutingDL.java).
+
+#### XML Parser 
+
+The [Hospital Log example](https://github.com/kamrankashef/BASE/blob/master/src/test/java/base/parsegen/xml/hospitalevents/TestHospitalEvents.java)
+shows some of BASE's more advnaced features:
+
+- Creating "augmented" Model attributes (creating new attributes from inferred attributes).  See how `localTimeAug` is defined.
+- Adjoining Models (combining Models to create new Models).  See how `Event`, `ShiftEnd`, `Meeting` and `Surgery`
+are combined into a single derived `Event` model.  Notice how the [derived Event class](https://github.com/kamrankashef/BASE/blob/master/expected_out/hospital_log/application/src/main/java/com/fakehospital/derived/model/Event.java)
+takes other Models to its constructor and maps those Model's attributes to its local attributes.
+- Adding completely custom attributes.  See how `customAttribute` is added to `Event`.
+
+BASE Infers this structure.
+```
+Xml: 
+   HospitalEvents: Date, EasternTimeZoneTime, Filename, Id, LocalTime, LocalTimeZone
+      ErRotation: Hospital, Id
+         Group: Code, Id, Name
+            EmployeesEmpty: 
+               Employee: FName, Id, LName
+         Event: EasternTimeZoneTime, Id, LocalDate, LocalTime, Name, Number
+            ShiftEnd: Summary
+            Meeting: Description
+               EmployeeMeeting: Id
+            Surgery: Floor, RoomNumber
+               GroupSurgery: Id, Role
+                  EmployeeGroupSurgery: Id
+```
+
 
 ## What's Coming Next
 
