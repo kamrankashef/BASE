@@ -40,9 +40,9 @@ public class TestHospitalEvents extends XMLGenTest {
         return model -> {
             final Map<PrimitiveField, String> augmentedFields = new HashMap<>();
 
-            if (model.getJavaClassName().equals("Event")) {
+            if (model.getJavaClassName().equals("HospitalEvents")) {
                 final String fieldName = "localTimeAug";
-                final String def = "common.DateUtil.extract(\"yyyyMMdd hh:mm:ss.S\", localDate + \" \" + localTime, localTimeZone)";
+                final String def = "common.DateUtil.extract(\"yyyyMMdd hh:mm:ss.S\", date + \" \" + localTime, localTimeZone)";
 
                 augmentedFields.put(
                         new PrimitiveField(fieldName, PrimitiveType.TIMESTAMP_FRACTION_3),
@@ -99,8 +99,9 @@ public class TestHospitalEvents extends XMLGenTest {
             final String[] modelNames = {"Event", "ShiftEnd", meetingName, surgeryName};
             final String[] prefixes = {"Event", "ShiftEnd", "Meeting", "Surgery"};
 
-            // Sub-event with no sub-elements
+            // Models that can be adjoined as auto-built
             eventSubModels.put("ShiftEnd", models.get("ShiftEnd"));
+            eventSubModels.put("Event", models.get("Event"));
 
             final AbstractModel adjoinedModel
                     = adjoinModelUtil.adjoinModels(
