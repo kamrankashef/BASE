@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HospitalEvents ID="1234" Date="2019-09-01" LocalTime="21:00:00 2019-8-10" LocalTimeZone="PST"
+                Filename="emergency-room-log.xml" EasternTimeZoneTime="20:45:15">
+    <ErRotation ID="20816" Hospital="St. John">
+        <Group ID="101" Code="MD" Name="Doctors">
+            <Employees>
+                <Employee ID="1001" FName="George" LName="Washington" />
+                <Employee ID="1002" FName="John" LName="Adams" />
+            </Employees>
+        </Group>
+        <Group ID="102" Code="RN" Name="Nurses">
+            <Employees>
+                <Employee ID="1003" FName="Thomas" LName="Jefferson" />
+                <Employee ID="1004" FName="James" LName="Madison" />
+            </Employees>
+        </Group>
+        <Event Number="1" LocalTime="21:00:00.000" LocalDate="20160211" EasternTimeZoneTime="18:00:00.000" ID="SSRT" Name="Shift Start"/>
+        <Event Number="2" LocalTime="21:10:00.000" LocalDate="20160211" EasternTimeZoneTime="18:10:00.000" ID="MTG" Name="Meeting">
+            <Meeting Description="Review trama case">
+                <Employee ID="1002"/>
+                <Employee ID="1003"/>
+            </Meeting>
+        </Event>
+        <Event Number="3" LocalTime="21:25:00.000" LocalDate="20160211" EasternTimeZoneTime="18:25:00.000" ID="SRG" Name="Surgery">
+            <SURGERY RoomNumber="302A" Floor="5">
+                <Group ID="101" Role="Primary">
+                    <Employee ID="1001"/>
+                </Group>
+                <Group ID="102" Role="Secondary">
+                    <Employee ID="1002"/>
+                </Group>
+            </SURGERY>
+        </Event>
+        <Event Number="4" LocalTime="21:30:00.000" LocalDate="20160211" EasternTimeZoneTime="18:30:00.000" ID="SEND" Name="Shift End">
+            <ShiftEnd Summary="1 surgery and 1 meeting" />
+        </Event>
+    </ErRotation>
+</HospitalEvents>
