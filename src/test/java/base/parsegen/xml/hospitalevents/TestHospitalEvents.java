@@ -72,7 +72,6 @@ public class TestHospitalEvents extends XMLGenTest {
             final List<AbstractModel> derivedModels = new LinkedList<>();
             final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, modelAugmenter, mergedModelMethods, mergedDLMethods, preserveConstraints);
 
-
             final String meetingName = "ZMeeting";
             final String surgeryName = "ZSurgery";
 
@@ -86,6 +85,7 @@ public class TestHospitalEvents extends XMLGenTest {
                 // TODO This might not be needed any longer
                 meeting.getDLMethodGenerators().clear();
                 eventSubModels.put(meetingName, meeting);
+                derivedModels.add(meeting);
             }
             {
                 final String[] modelNames = {"Surgery", "Group", "Employee"};
@@ -94,6 +94,7 @@ public class TestHospitalEvents extends XMLGenTest {
                 // TODO This might not be needed any longer
                 surgery.getDLMethodGenerators().clear();
                 eventSubModels.put(surgeryName, surgery);
+                derivedModels.add(surgery);
             }
 
             final String[] modelNames = {"Event", "ShiftEnd", meetingName, surgeryName};
