@@ -1,16 +1,11 @@
 package fullsuite;
 
 import base.application.ApplicationBuilder;
+import base.application.gen2.AbstractBASEConfig;
 import base.dl.methodgenerators.InsertObject;
 import base.dl.methodgenerators.InsertRaw;
 import base.gen.DLGen;
 import base.gen.ModelGen;
-import base.parsergen.rules.ModelAugmenterI;
-import base.parsergen.rules.ModelTransformerI;
-import base.parsergen.rules.SourceFiles;
-import base.parsergen.rules.TypeRenamerI;
-import base.parsergen.rules.TypeSetsI;
-import base.parsergen.XMLBuilder;
 import base.model.AbstractModel;
 import base.model.Constraint;
 import base.model.PrimitiveField;
@@ -18,31 +13,25 @@ import base.model.methodgenerators.AttributeBasedFromElemMethodGenerator;
 import base.model.methodgenerators.ConstructorGenerator;
 import base.model.methodgenerators.DerivedModelConstructorGenerator;
 import base.parsergen.AbstractBuilderFromSource;
+import base.parsergen.XMLBuilder;
 import base.parsergen.rules.ParseRuleSet;
+import base.parsergen.rules.SourceFiles;
+import base.parsergen.rules.TypeRenamerI;
 import base.util.FileUtil;
+import base.workflow.Helpers;
+import org.junit.Test;
+import org.yaml.snakeyaml.Yaml;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-import base.workflow.Helpers;
-import org.junit.Test;
-import org.yaml.snakeyaml.Yaml;
 
+public abstract class XMLGenTest extends AbstractBASEConfig {
 
-public abstract class XMLGenTest {
-
-    public abstract String getOrg();
-
-    public abstract String getYAMLSource();
 
     public abstract String getBaselineDir();
-
-    public abstract ModelAugmenterI getModelAugmenterI();
-
-    public abstract TypeSetsI getTypeSetsI();
-
-    public abstract ModelTransformerI getModelTransformerI();
 
     protected SourceFiles getSourceFiles() throws IOException {
         final String yamlAsString = Helpers.resourceAsString(getClass(),getYAMLSource());
@@ -154,14 +143,17 @@ public abstract class XMLGenTest {
         }
     }
 
+    @Override
     public String getExportDir() {
         return "/tmp/project_test_out";
     }
 
+    @Override
     public boolean getAutoGenTypeSet() {
         return false;
     }
 
+    @Override
     public boolean allowMissingAttributes() {
         return true;
     }
