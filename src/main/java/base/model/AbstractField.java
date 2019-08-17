@@ -1,8 +1,10 @@
 package base.model;
 
-import base.application.gen2.ApplicationSettings;
+import base.lang.JavaSyntax;
+import base.lang.LanguageSyntaxI;
 import base.util.CaseConversion;
 import com.google.gson.annotations.SerializedName;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -14,7 +16,6 @@ public abstract class AbstractField
 
     @SerializedName("contraints")
     public final Set<Constraint> contraints;
-//    public boolean nullable = false;
     @SerializedName("shared_with_client")
     public boolean shareWithClient = true;
     @SerializedName("user_generated")
@@ -22,12 +23,13 @@ public abstract class AbstractField
     @SerializedName("uuid")
     private final String uuid;
 
+    // TODO Factor this out and allow for injection of the syntax
+    private LanguageSyntaxI languageSyntax = new JavaSyntax();
+
     public AbstractField(
             final Set<Constraint> contraints) {
         this.contraints = new HashSet<>(contraints);
         uuid = UUID.randomUUID().toString();
-//        this.nullable = !contraints.contains(Constraint.NOT_NULL);
-//        System.out.println(nullable);
     }
 
     public final void setNullable(final boolean canBeNull) {
@@ -124,7 +126,7 @@ public abstract class AbstractField
         } else {
             javaVarName = prefix + CaseConversion.toJavaClassName(this.getName());
         }
-        if (javaVarName.matches("^\\d+.*$") || ApplicationSettings.isReservedWord(javaVarName)) {
+        if (javaVarName.matches("^\\d+.*$") || languageSyntax.isReservedWord(javaVarName)) {
             return "_" + javaVarName;
         }
         return javaVarName;
@@ -132,7 +134,7 @@ public abstract class AbstractField
 
     public String toJavaVariableName() {
         final String javaVarName = CaseConversion.toJavaVariableName(this.getName());
-        if (javaVarName.matches("^\\d+.*$") || ApplicationSettings.isReservedWord(javaVarName)) {
+        if (javaVarName.matches("^\\d+.*$") || languageSyntax.isReservedWord(javaVarName)) {
             return "_" + javaVarName;
         }
         return javaVarName;
