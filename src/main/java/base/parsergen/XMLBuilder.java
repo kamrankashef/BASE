@@ -54,7 +54,7 @@ final public class XMLBuilder extends AbstractBuilderFromSource {
             }
 
             // XML Parser
-            final String parserName = sourceFile.type + "Parser";
+            final String parserName = sourceFile.getType() + "Parser";
             final String target = parserName;
 
             final String genParser = XMLParserGenerator.createNoOpParser(xsdNesting, parserName, scanner.models.values());
@@ -63,7 +63,7 @@ final public class XMLBuilder extends AbstractBuilderFromSource {
             buildMains.append(AbstractBuilderFromSource.createAntTarget(target,
                     "main." + parserName,
                     parserName,
-                    sourceFile.type + " parser",
+                    sourceFile.getType() + " parser",
                     "compile,check-jdbc-url",
                     Collections.singletonList("${xml.file}"),
                     Collections.singletonList("JDBC_CONNECTION_STRING=${jdbc.connection.string}")));

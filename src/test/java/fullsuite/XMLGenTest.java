@@ -44,7 +44,7 @@ public abstract class XMLGenTest extends AbstractBASEConfig {
             final String fileName = sourceFileAsMap.get("fileName");
             final String type = sourceFileAsMap.get("type");
 
-            sourceFiles.addSourceFile(fileName, type, () -> {
+            sourceFiles.addSourceFile(type, () -> {
                 final String resourcePath = rootDir + "/" + fileName;
                 return XMLGenTest.class.getClassLoader().getResourceAsStream(resourcePath);
             });

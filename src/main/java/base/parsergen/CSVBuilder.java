@@ -51,10 +51,8 @@ final public class CSVBuilder extends AbstractBuilderFromSource {
         // TODO The source files concept needs to be reexamined
         for (final SourceFiles.SourceFile sourceFile : parseRuleSet.sourceFiles.sourceFiles) {
 
-            final String modelName = sourceFile.type;
+            final String modelName = sourceFile.getType();
 
-            final String resourcePath = parseRuleSet.sourceFiles.rootDir + "/" + sourceFile.fileName;
-            System.out.println("resource path: " + resourcePath);
             final Reader in = new InputStreamReader(sourceFile.getInputStream());//new FileReader(parseRuleSet.sourceFiles.rootDir + "/" + sourceFile.fileName);
             final CSVParser records = CSVFormat.EXCEL.withHeader().parse(in);
             final Set<String> headers = records.getHeaderMap().keySet();
@@ -99,7 +97,7 @@ final public class CSVBuilder extends AbstractBuilderFromSource {
             mainsBuildXML.add(AbstractBuilderFromSource.createAntTarget(target,
                     "main." + parserName,
                     parserName,
-                    sourceFile.type + " parser",
+                    sourceFile.getType() + " parser",
                     "compile,check-jdbc-url",
                     Collections.singletonList("${xml.file}"),
                     Collections.singletonList("JDBC_CONNECTION_STRING=${jdbc.connection.string}")));
