@@ -1,6 +1,6 @@
 package base.files;
 
-import base.files.common.DBUtil;
+import base.util.DBUtil;
 import kamserverutils.common.util.IOUtil;
 
 import static base.util.StreamUtil.getProjectFile;
