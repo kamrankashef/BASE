@@ -3,11 +3,8 @@ package base.parsegen.xml.hospitalevents;
 import base.model.AbstractModel;
 import base.model.PrimitiveField;
 import base.model.PrimitiveType;
-import base.parsergen.rules.ModelAugmenterI;
-import base.parsergen.rules.ModelTransformerI;
-import base.parsergen.rules.TypeSetsI;
-import base.parsergen.rules.impl.StatefulTypeSetGuesser;
 import base.util.AdjoinModelUtil;
+import base.v3.AbstractApplicationBuilder;
 import fullsuite.XMLGenTest;
 
 import java.util.HashMap;
@@ -16,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 
 public class TestHospitalEvents extends XMLGenTest {
+
+
+    final boolean preserveConstraints = false;
 
     @Override
     public String getOrg() {
@@ -32,12 +32,13 @@ public class TestHospitalEvents extends XMLGenTest {
         return "expected_out/hospital_log";
     }
 
-
     @Override
-    public ModelAugmenterI getModelAugmenterI() {
+    protected void applyOverrides(final AbstractApplicationBuilder abstractApplicationBuilder) {
 
-        // Combine localDate, localTime and localTimeZone to create a proper timestamp
-        return model -> {
+        // abstractApplicationBuilder.disableConstraints();
+
+        // Set the ModelAugmenter
+        abstractApplicationBuilder.setModelAugmenterI(model -> {
             final Map<PrimitiveField, String> augmentedFields = new HashMap<>();
 
             if (model.getJavaClassName().equals("HospitalEvents")) {
@@ -49,20 +50,9 @@ public class TestHospitalEvents extends XMLGenTest {
                         def);
             }
             return augmentedFields;
-        };
-    }
-
-    @Override
-    public TypeSetsI getTypeSetsI() {
-        return new StatefulTypeSetGuesser();
-    }
-
-    @Override
-    public ModelTransformerI getModelTransformerI() {
-
-        final boolean preserveConstraints = false;
-
-        return (pkg, models, modelAugmenter, mergedModelMethods, mergedDLMethods) -> {
+        });
+        abstractApplicationBuilder.setModelTransformerI(
+        (pkg, models, modelAugmenter, mergedModelMethods, mergedDLMethods) -> {
             final PrimitiveField customAttribute = new PrimitiveField("customAttribute", PrimitiveType.TINY_TEXT);
 
             final PrimitiveField[] players = {
@@ -111,6 +101,9 @@ public class TestHospitalEvents extends XMLGenTest {
             derivedModels.add(adjoinedModel);
 
             return derivedModels;
-        };
+        });
+
     }
+
+
 }

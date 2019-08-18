@@ -32,6 +32,7 @@ public class AbstractApplicationBuilder {
     private ModelTransformerI modelTransformer = ModelTransformerI.EMPTY_TRANSFORMER;
     private Set<Constraint> constraints = Collections.singleton(Constraint.NOT_NULL);
     private boolean autoGenTypeSetEnabled = false;
+    private TypeRenamerI typeRenamer = TypeRenamerI.DEFAULT_RENAMER;
 
     // TODO ModelMethodGenerator needs an equals driven by name
     final private Set<ModelGen.ModelMethodGenerator> elemModelMethods = new HashSet<>();
@@ -53,18 +54,18 @@ public class AbstractApplicationBuilder {
         return this;
     }
 
-    protected AbstractApplicationBuilder setTypeSetsI(final TypeSetsI typeSets) {
+    public AbstractApplicationBuilder setTypeSetsI(final TypeSetsI typeSets) {
         this.typeSets = typeSets;
         return this;
     }
 
-    protected AbstractApplicationBuilder setModelTransformerI(final ModelTransformerI modelTransformer) {
+    public AbstractApplicationBuilder setModelTransformerI(final ModelTransformerI modelTransformer) {
         this.modelTransformer = modelTransformer;
         return this;
     }
 
 
-    protected AbstractApplicationBuilder disableConstraints() {
+    public AbstractApplicationBuilder disableConstraints() {
         constraints.clear();
         return this;
     }
@@ -85,7 +86,6 @@ public class AbstractApplicationBuilder {
         return this;
     }
 
-    private TypeRenamerI typeRenamer = TypeRenamerI.DEFAULT_RENAMER;
 
     public AbstractApplicationBuilder setTypeRenamerI(final TypeRenamerI typeRenamer) {
         this.typeRenamer = typeRenamer;
@@ -112,13 +112,14 @@ public class AbstractApplicationBuilder {
         return this;
     }
 
-    protected AbstractApplicationBuilder setAllowMissingAttributes(final boolean allowMissing) {
+    public AbstractApplicationBuilder setAllowMissingAttributes(final boolean allowMissing) {
         this.allowMissing = allowMissing;
         return this;
     }
 
 
     // TODO This is convoluted - focus on this in next refactor
+    // For the immediate teram extend this to a CSV version
     protected AbstractBuilderFromSource getBuilder() throws IOException {
         // TODO Break out Builder - E.g. CSV vs XML Builder.
         return AbstractBuilderFromSource.run(new XMLBuilder(
@@ -133,7 +134,7 @@ public class AbstractApplicationBuilder {
         ));
     }
 
-    final public void generateApplication() throws IOException, InterruptedException {
+    final public void build() throws IOException, InterruptedException {
 
         final String exportDir = this.exportDir;
         System.out.println("Deleting export dir: '" + exportDir + "'");
