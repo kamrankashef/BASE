@@ -33,6 +33,11 @@ public class TestHospitalEvents extends XMLGenTest {
     }
 
     @Override
+    protected String getExportDir() {
+        return "/tmp/test_hospital_app";
+    }
+
+    @Override
     protected void applyOverrides(final AbstractApplicationBuilder abstractApplicationBuilder) {
 
         // abstractApplicationBuilder.disableConstraints();
@@ -52,56 +57,56 @@ public class TestHospitalEvents extends XMLGenTest {
             return augmentedFields;
         });
         abstractApplicationBuilder.setModelTransformerI(
-        (pkg, models, modelAugmenter, mergedModelMethods, mergedDLMethods) -> {
-            final PrimitiveField customAttribute = new PrimitiveField("customAttribute", PrimitiveType.TINY_TEXT);
+                (pkg, models, modelAugmenter, mergedModelMethods, mergedDLMethods) -> {
+                    final PrimitiveField customAttribute = new PrimitiveField("customAttribute", PrimitiveType.TINY_TEXT);
 
-            final PrimitiveField[] players = {
-                    new PrimitiveField("_employee1ID", PrimitiveType.INT),
-                    new PrimitiveField("_employee2ID", PrimitiveType.INT)};
+                    final PrimitiveField[] players = {
+                            new PrimitiveField("_employee1ID", PrimitiveType.INT),
+                            new PrimitiveField("_employee2ID", PrimitiveType.INT)};
 
-            final List<AbstractModel> derivedModels = new LinkedList<>();
-            final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, modelAugmenter, mergedModelMethods, mergedDLMethods, preserveConstraints);
+                    final List<AbstractModel> derivedModels = new LinkedList<>();
+                    final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, modelAugmenter, mergedModelMethods, mergedDLMethods, preserveConstraints);
 
-            final String meetingName = "ZMeeting";
-            final String surgeryName = "ZSurgery";
+                    final String meetingName = "ZMeeting";
+                    final String surgeryName = "ZSurgery";
 
-            final Map<String, AbstractModel> eventSubModels = new HashMap<>();
+                    final Map<String, AbstractModel> eventSubModels = new HashMap<>();
 
 
-            {
-                final String[] modelNames = {"Meeting", "Employee"};
-                final String[] prefixes = {"", "Employee"};
-                final AbstractModel meeting = adjoinModelUtil.adjoinModels(modelNames, prefixes, meetingName, models);
-                // TODO This might not be needed any longer
-                meeting.getDLMethodGenerators().clear();
-                eventSubModels.put(meetingName, meeting);
-                derivedModels.add(meeting);
-            }
-            {
-                final String[] modelNames = {"Surgery", "Group", "Employee"};
-                final String[] prefixes = {"", "Group", "Employee"};
-                final AbstractModel surgery = adjoinModelUtil.adjoinModels(modelNames, prefixes, surgeryName, models);
-                // TODO This might not be needed any longer
-                surgery.getDLMethodGenerators().clear();
-                eventSubModels.put(surgeryName, surgery);
-                derivedModels.add(surgery);
-            }
+                    {
+                        final String[] modelNames = {"Meeting", "Employee"};
+                        final String[] prefixes = {"", "Employee"};
+                        final AbstractModel meeting = adjoinModelUtil.adjoinModels(modelNames, prefixes, meetingName, models);
+                        // TODO This might not be needed any longer
+                        meeting.getDLMethodGenerators().clear();
+                        eventSubModels.put(meetingName, meeting);
+                        derivedModels.add(meeting);
+                    }
+                    {
+                        final String[] modelNames = {"Surgery", "Group", "Employee"};
+                        final String[] prefixes = {"", "Group", "Employee"};
+                        final AbstractModel surgery = adjoinModelUtil.adjoinModels(modelNames, prefixes, surgeryName, models);
+                        // TODO This might not be needed any longer
+                        surgery.getDLMethodGenerators().clear();
+                        eventSubModels.put(surgeryName, surgery);
+                        derivedModels.add(surgery);
+                    }
 
-            final String[] modelNames = {"Event", "ShiftEnd", meetingName, surgeryName};
-            final String[] prefixes = {"Event", "ShiftEnd", "Meeting", "Surgery"};
+                    final String[] modelNames = {"Event", "ShiftEnd", meetingName, surgeryName};
+                    final String[] prefixes = {"Event", "ShiftEnd", "Meeting", "Surgery"};
 
-            // Models that can be adjoined as auto-built
-            eventSubModels.put("ShiftEnd", models.get("ShiftEnd"));
-            eventSubModels.put("Event", models.get("Event"));
+                    // Models that can be adjoined as auto-built
+                    eventSubModels.put("ShiftEnd", models.get("ShiftEnd"));
+                    eventSubModels.put("Event", models.get("Event"));
 
-            final AbstractModel adjoinedModel
-                    = adjoinModelUtil.adjoinModels(
-                    modelNames, prefixes, "Event", eventSubModels, customAttribute);
+                    final AbstractModel adjoinedModel
+                            = adjoinModelUtil.adjoinModels(
+                            modelNames, prefixes, "Event", eventSubModels, customAttribute);
 
-            derivedModels.add(adjoinedModel);
+                    derivedModels.add(adjoinedModel);
 
-            return derivedModels;
-        });
+                    return derivedModels;
+                });
 
     }
 

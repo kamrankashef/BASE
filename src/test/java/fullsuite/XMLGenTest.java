@@ -7,6 +7,7 @@ import base.model.methodgenerators.ConstructorGenerator;
 import base.model.methodgenerators.DerivedModelConstructorGenerator;
 import base.parsergen.rules.SourceFiles;
 import base.v3.AbstractApplicationBuilder;
+import base.v3.XMLApplicationBuilder;
 import base.workflow.Helpers;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
@@ -36,6 +37,7 @@ public abstract class XMLGenTest {
 
     protected SourceFiles getSourceFiles() throws IOException {
         final String yamlAsString = Helpers.resourceAsString(getClass(), getYAMLSource());
+        System.out.println("YAML String is " + yamlAsString);
         final Map<String, Object> config = (Map<String, Object>) new Yaml().load(yamlAsString);
         final String rootDir = (String) config.get("rootDir");
         final SourceFiles sourceFiles = new SourceFiles(rootDir);
@@ -47,6 +49,7 @@ public abstract class XMLGenTest {
 
             sourceFiles.addSourceFile(type, () -> {
                 final String resourcePath = rootDir + "/" + fileName;
+                System.out.println("Resource path is " + resourcePath);
                 return XMLGenTest.class.getClassLoader().getResourceAsStream(resourcePath);
             });
         }
@@ -55,20 +58,26 @@ public abstract class XMLGenTest {
     }
 
 
+    protected AbstractApplicationBuilder getApplicationBuilder() throws IOException {
+        return new XMLApplicationBuilder(getOrg(), getSourceFiles(), getExportDir());
+    }
+
     @Test
     final public void runTest() throws FileNotFoundException, InterruptedException, IOException {
 
         final AbstractApplicationBuilder abstractApplicationBuilder
-                = new AbstractApplicationBuilder(getOrg(), getSourceFiles(), getExportDir())
+                = getApplicationBuilder()
+                .addMergedModelMethod(new ConstructorGenerator())
                 .addElemModelMethods(new AttributeBasedFromElemMethodGenerator())
                 .addElemModelMethods(new ConstructorGenerator())
-                .addMergedModelMethod(new ConstructorGenerator())
                 .addMergedModelMethod(new DerivedModelConstructorGenerator())
                 .addMergedDLModelMethod(new InsertRaw())
                 .addMergedDLModelMethod(new InsertObject());
 
 
         applyOverrides(abstractApplicationBuilder);
+
+        abstractApplicationBuilder.build();
 
         final String baselineDir = getBaselineDir();
 

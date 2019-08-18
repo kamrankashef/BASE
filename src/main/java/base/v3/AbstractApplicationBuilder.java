@@ -17,30 +17,31 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 
 // Follow the model of XMLGenTest
-public class AbstractApplicationBuilder {
+public abstract class AbstractApplicationBuilder {
 
     final SourceFiles sourceFiles;
 
-    private String exportDir = "/tmp/base_application";
-    private String org = "com.example";
-    private ModelAugmenterI modelAugmenter = ModelAugmenterI.EMPTY_AUGMENTER;
-    private TypeSetsI typeSets = new StatefulTypeSetGuesser();
-    private ModelTransformerI modelTransformer = ModelTransformerI.EMPTY_TRANSFORMER;
-    private Set<Constraint> constraints = Collections.singleton(Constraint.NOT_NULL);
-    private boolean autoGenTypeSetEnabled = false;
-    private TypeRenamerI typeRenamer = TypeRenamerI.DEFAULT_RENAMER;
+    protected String exportDir = "/tmp/base_application";
+    protected String org = "com.example";
+    protected ModelAugmenterI modelAugmenter = ModelAugmenterI.EMPTY_AUGMENTER;
+    protected TypeSetsI typeSets = new StatefulTypeSetGuesser();
+    protected ModelTransformerI modelTransformer = ModelTransformerI.EMPTY_TRANSFORMER;
+    protected Set<Constraint> constraints = Collections.singleton(Constraint.NOT_NULL);
+    protected boolean autoGenTypeSetEnabled = false;
+    protected TypeRenamerI typeRenamer = TypeRenamerI.DEFAULT_RENAMER;
 
     // TODO ModelMethodGenerator needs an equals driven by name
-    final private Set<ModelGen.ModelMethodGenerator> elemModelMethods = new HashSet<>();
-    final private Set<ModelGen.ModelMethodGenerator> mergedModelMethods = new HashSet<>();
-    final private Set<DLGen.DLMethodGenerator> dlMethods = new HashSet<>();
+    final protected Set<ModelGen.ModelMethodGenerator> elemModelMethods = new LinkedHashSet<>();
+    final protected Set<ModelGen.ModelMethodGenerator> mergedModelMethods = new LinkedHashSet<>();
+    final protected Set<DLGen.DLMethodGenerator> dlMethods = new LinkedHashSet<>();
 
     // TODO Is this actually still needed?
-    private boolean allowMissing = true;
+    protected boolean allowMissing = true;
 
     public AbstractApplicationBuilder(final String org, final SourceFiles sourceFiles, final String exportDir) {
         this.org = org;
@@ -118,20 +119,15 @@ public class AbstractApplicationBuilder {
     }
 
 
+    // TODO This is a bit convoluted.  Make it clear that this is more of the pre-builder discovery phase
+    protected abstract  AbstractBuilderFromSource getBuilderFromSource() throws IOException;
+
+
     // TODO This is convoluted - focus on this in next refactor
     // For the immediate teram extend this to a CSV version
     protected AbstractBuilderFromSource getBuilder() throws IOException {
         // TODO Break out Builder - E.g. CSV vs XML Builder.
-        return AbstractBuilderFromSource.run(new XMLBuilder(
-                new ParseRuleSet(this.org,
-                        this.modelAugmenter,
-                        this.elemModelMethods,
-                        this.typeSets,
-                        this.typeRenamer,
-                        this.sourceFiles,
-                        this.allowMissing,
-                        this.constraints)
-        ));
+        return AbstractBuilderFromSource.run(getBuilderFromSource());
     }
 
     final public void build() throws IOException, InterruptedException {

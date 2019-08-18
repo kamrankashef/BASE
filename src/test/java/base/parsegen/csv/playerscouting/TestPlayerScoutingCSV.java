@@ -1,17 +1,21 @@
 package base.parsegen.csv.playerscouting;
 
+import base.dl.methodgenerators.*;
 import base.gen.DLGen;
 import base.gen.ModelGen;
 import base.model.AbstractModel;
 import base.model.ModelUtil;
 import base.model.PrimitiveField;
 import base.model.PrimitiveType;
+import base.model.methodgenerators.ConstructorGenerator;
+import base.model.methodgenerators.FromCSVGenerator;
 import base.parsergen.rules.ModelAugmenterI;
 import base.parsergen.rules.ModelTransformerI;
 import base.parsergen.rules.TypeRenamerI;
 import base.parsergen.rules.TypeSetsI;
 import base.parsergen.rules.impl.StatefulTypeSetGuesser;
 import base.util.AdjoinModelUtil;
+import base.v3.AbstractApplicationBuilder;
 import fullsuite.CSVGenTest;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,8 +41,10 @@ public class TestPlayerScoutingCSV extends CSVGenTest {
     }
 
     @Override
-    public ModelAugmenterI getModelAugmenterI() {
-        return (model) -> {
+    protected void applyOverrides(final AbstractApplicationBuilder abstractApplicationBuilder) {
+
+        // Set ModelAugmenterI
+        abstractApplicationBuilder.setModelAugmenterI((model) -> {
             final Map<PrimitiveField, String> addedFields = new HashMap<>();
             final PrimitiveField reportDateAug = new PrimitiveField("reportDateAug", PrimitiveType.DATE);
             final PrimitiveField birthDateAug = new PrimitiveField("birthDateAug", PrimitiveType.DATE);
@@ -51,18 +57,13 @@ public class TestPlayerScoutingCSV extends CSVGenTest {
             addedFields.put(editedOnAug, "editedOn == null ? null : common.DateUtil.extract(common.DateUtil.SIMPLE_DATE, editedOn, \"EDT\")");
 
             return addedFields;
-        };
-    }
+        });
 
-    @Override
-    public TypeSetsI getTypeSetsI() {
-        return new StatefulTypeSetGuesser();
-    }
+        // Set TypeRenamerI
+        abstractApplicationBuilder.setTypeRenamerI(TypeRenamerI.SPACE_RENAMER);
 
-    @Override
-    public ModelTransformerI getModelTransformerI() {
-
-        return (final String pkg,
+        // Set ModelTransformerI
+        abstractApplicationBuilder.setModelTransformerI((final String pkg,
                 final Map<String, AbstractModel> models,
                 final ModelAugmenterI modelAugmenter,
                 final Set<ModelGen.ModelMethodGenerator> mergedModelMethods,
@@ -77,12 +78,9 @@ public class TestPlayerScoutingCSV extends CSVGenTest {
 
             derivedModels.add(adjoinModelUtil.adjoinFields("PlayerScoutingFeed", "PlayerScouting", models));
             return derivedModels;
-        };
-    }
+        });
 
-    @Override
-    public TypeRenamerI getTypeRenamerI() {
-        return TypeRenamerI.SPACE_RENAMER;
     }
 
 }
+
