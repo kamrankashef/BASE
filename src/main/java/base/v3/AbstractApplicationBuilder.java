@@ -21,118 +21,121 @@ import java.util.Set;
 
 
 // Follow the model of XMLGenTest
-public abstract  class AbstractApplicationBuilder {
+public class AbstractApplicationBuilder {
 
-    protected String getExportDir() {
-        return "/tmp/base_application";
+    final SourceFiles sourceFiles;
+
+    private String exportDir = "/tmp/base_application";
+    private String org = "com.example";
+    private ModelAugmenterI modelAugmenter = ModelAugmenterI.EMPTY_AUGMENTER;
+    private TypeSetsI typeSets = new StatefulTypeSetGuesser();
+    private ModelTransformerI modelTransformer = ModelTransformerI.EMPTY_TRANSFORMER;
+    private Set<Constraint> constraints = Collections.singleton(Constraint.NOT_NULL);
+    private boolean autoGenTypeSetEnabled = false;
+
+    // TODO ModelMethodGenerator needs an equals driven by name
+    final private Set<ModelGen.ModelMethodGenerator> elemModelMethods = new HashSet<>();
+    final private Set<ModelGen.ModelMethodGenerator> mergedModelMethods = new HashSet<>();
+    final private Set<DLGen.DLMethodGenerator> dlMethods = new HashSet<>();
+
+    // TODO Is this actually still needed?
+    private boolean allowMissing = true;
+
+    public AbstractApplicationBuilder(final String org, final SourceFiles sourceFiles, final String exportDir) {
+        this.org = org;
+        this.sourceFiles = sourceFiles;
+        this.exportDir = exportDir;
     }
 
-    /**
-     * The generated code package name, e.g. com.companyname
-     * @return
-     */
-    protected String getOrg() {
-        return "com.example";
+
+    public AbstractApplicationBuilder setModelAugmenterI(final ModelAugmenterI modelAugmenter) {
+        this.modelAugmenter = modelAugmenter;
+        return this;
+    }
+
+    protected AbstractApplicationBuilder setTypeSetsI(final TypeSetsI typeSets) {
+        this.typeSets = typeSets;
+        return this;
+    }
+
+    protected AbstractApplicationBuilder setModelTransformerI(final ModelTransformerI modelTransformer) {
+        this.modelTransformer = modelTransformer;
+        return this;
     }
 
 
-    protected ModelAugmenterI getModelAugmenterI() {
-        return ModelAugmenterI.EMPTY_AUGMENTER;
-    }
-
-    protected TypeSetsI getTypeSetsI() {
-        return new StatefulTypeSetGuesser();
-    }
-
-
-    protected ModelTransformerI getModelTransformerI() {
-        return ModelTransformerI.EMPTY_TRANSFORMER;
-    }
-
-    protected Set<Constraint> getConstraints() {
-        return Collections.singleton(Constraint.NOT_NULL);
+    protected AbstractApplicationBuilder disableConstraints() {
+        constraints.clear();
+        return this;
     }
 
     // TODO Migrate away from tight coupling of yaml config with application building.  Should be stream driven.
-    public abstract String getYAMLSource();
+    // TODO Streams of Source data should be provided in the constructor
+    // public abstract String getYAMLSource();
+
     /**
      * Path to export the generated application to
+     *
      * @return
      */
 
     // TODO This should be replaced with "discovery" vs "generative" mode
-    protected boolean getAutoGenTypeSet() {
-        return false;
+    public AbstractApplicationBuilder enableAutoGenTypeSet() {
+        this.autoGenTypeSetEnabled = true;
+        return this;
     }
 
-    protected TypeRenamerI getTypeRenamerI() {
-        return TypeRenamerI.DEFAULT_RENAMER;
+    private TypeRenamerI typeRenamer = TypeRenamerI.DEFAULT_RENAMER;
+
+    public AbstractApplicationBuilder setTypeRenamerI(final TypeRenamerI typeRenamer) {
+        this.typeRenamer = typeRenamer;
+        return this;
     }
 
     // ********** Methods Generated ********** //
 
-    // Elem Model methods
-    // TODO ModelMethodGenerator needs an equals driven by name
-    final private Set<ModelGen.ModelMethodGenerator> elemModelMethods = new HashSet<>();
 
-    // See about reducing scope to private
-    public Set<ModelGen.ModelMethodGenerator> getElemModelMethods() {
-        return elemModelMethods;
-    }
-
-    public AbstractApplicationBuilder addElemModelMethod(ModelGen.ModelMethodGenerator modelMethodGenerator) {
+    public AbstractApplicationBuilder addElemModelMethods(final ModelGen.ModelMethodGenerator modelMethodGenerator) {
         elemModelMethods.add(modelMethodGenerator);
         return this;
     }
 
-    // Derived Model methods
-    final private Set<ModelGen.ModelMethodGenerator> mergedModelMethods = new HashSet<>();
-
-    public Set<ModelGen.ModelMethodGenerator> getMergedModelMethods() {
-        return mergedModelMethods;
-    }
 
     public AbstractApplicationBuilder addMergedModelMethod(ModelGen.ModelMethodGenerator modelMethodGenerator) {
         mergedModelMethods.add(modelMethodGenerator);
         return this;
     }
 
-    // DL Methods
-    final private Set<DLGen.DLMethodGenerator> dlMethods = new HashSet<>();
 
     public AbstractApplicationBuilder addMergedDLModelMethod(DLGen.DLMethodGenerator modelMethodGenerator) {
         dlMethods.add(modelMethodGenerator);
         return this;
     }
 
-    public Set<DLGen.DLMethodGenerator> getMergedDLMethods() {
-        return dlMethods;
+    protected AbstractApplicationBuilder setAllowMissingAttributes(final boolean allowMissing) {
+        this.allowMissing = allowMissing;
+        return this;
     }
 
-    // TODO Is this actually still needed?
-    protected boolean allowMissingAttributes() {
-        return true;
-    }
-
-    protected abstract SourceFiles getSourceFiles();
 
     // TODO This is convoluted - focus on this in next refactor
     protected AbstractBuilderFromSource getBuilder() throws IOException {
+        // TODO Break out Builder - E.g. CSV vs XML Builder.
         return AbstractBuilderFromSource.run(new XMLBuilder(
-                new ParseRuleSet(getOrg(),
-                        getModelAugmenterI(),
-                        getElemModelMethods(),
-                        getTypeSetsI(),
-                        getTypeRenamerI(),
-                        getSourceFiles(),
-                        allowMissingAttributes(),
-                        getConstraints())
+                new ParseRuleSet(this.org,
+                        this.modelAugmenter,
+                        this.elemModelMethods,
+                        this.typeSets,
+                        this.typeRenamer,
+                        this.sourceFiles,
+                        this.allowMissing,
+                        this.constraints)
         ));
     }
 
     final public void generateApplication() throws IOException, InterruptedException {
 
-        final String exportDir = getExportDir();
+        final String exportDir = this.exportDir;
         System.out.println("Deleting export dir: '" + exportDir + "'");
         FileUtil.deleteDir(new File(exportDir));
 
@@ -142,7 +145,7 @@ public abstract  class AbstractApplicationBuilder {
         // This was part of semi-automated data schema discovery
         // Perhaps create a logical break here
         // e.g. call this.postBuildHook()
-        if (getAutoGenTypeSet()) {
+        if (this.autoGenTypeSetEnabled) {
             for (final AbstractModel model : builder.getElemModels()) {
                 for (final PrimitiveField f : model.getSimplePrimitiveFields()) {
                     final String className = f.getJavaClassName();
@@ -162,21 +165,21 @@ public abstract  class AbstractApplicationBuilder {
 
         System.out.println(builder.getElemModelMap());
         // This does the actual export
-        ApplicationBuilder.buildElementParserAndLayerModels(getOrg(),
+        ApplicationBuilder.buildElementParserAndLayerModels(this.org,
                 builder.getElemModelMap(),
                 builder.getGenedParsers(),
-                getModelAugmenterI(),
-                getModelTransformerI(),
-                getMergedModelMethods(),
-                getMergedDLMethods(),
+                this.modelAugmenter,
+                this.modelTransformer,
+                this.mergedModelMethods,
+                this.dlMethods,
                 builder.getAntEntries().iterator().next(),
                 exportDir);
 
         // This needs to be driven by target SQL schema
         ApplicationBuilder.convertToSqlServer(
-                getExportDir()
+                this.exportDir
                         + "/application/sql/schema.sql",
-                getExportDir()
+                this.exportDir
                         + "/application/sql/schema.sql");
 
     }
