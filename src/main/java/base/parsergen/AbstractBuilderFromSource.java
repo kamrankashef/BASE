@@ -46,15 +46,6 @@ public abstract class AbstractBuilderFromSource {
 
     abstract protected void process() throws IOException;
 
-    // This should all be handled by sourceFile.getInputStream()
-    @Deprecated
-    protected final String sourceFileToString(final String rootDir,
-            final SourceFile sourceFile) throws IOException {
-        final String fileName = rootDir + "/" + sourceFile.fileName;
-        System.out.println("Processing file: " + fileName);
-        System.out.println("file name is " + fileName);
-        return FileUtil.fileToString(fileName);
-    }
 
     @Deprecated
     protected static String createAntTarget(final String target,

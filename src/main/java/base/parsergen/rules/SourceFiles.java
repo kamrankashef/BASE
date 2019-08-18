@@ -2,6 +2,7 @@ package base.parsergen.rules;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,87 +43,27 @@ public class SourceFiles {
     }
 
     public interface StreamGetter {
-        public InputStream getStream();
+        public InputStream getStream() throws FileNotFoundException;
     }
 
-    // TODO Simplify this
-    public static class SourceFile implements Comparable<SourceFile> {
 
-        @SerializedName("file_name")
-        public final String fileName;
-        @SerializedName("type")
-        public final String type;
-        @SerializedName("file_type")
-        public final FileType fileType;
+    // TODO Refactor - this has reduced down to just a wrapper on StreamGetter
+    public static class SourceFile {
 
 
         private final StreamGetter streamGetter;
+        private final String type;
 
-        public SourceFile(final String path) {
-            this(path, FileType.fromFileName(path), "NoType", null);
-        }
-
-        public SourceFile() {
-            this(null, null, null);
-        }
-
-        public SourceFile(final String path,
-                          final String type,
-                          final StreamGetter streamGetter) {
-            this(path, FileType.fromFileName(path), type, streamGetter);
-        }
-
-        public SourceFile(final String path,
-                          final FileType fileType,
-                          final String type,
-                          final StreamGetter streamGetter) {
-
-            this.fileName = path;
-            this.fileType = fileType;
-            this.type = type;
+        public SourceFile(final String type, final StreamGetter streamGetter) {
             this.streamGetter = streamGetter;
+            this.type = type;
         }
 
-        @Override
-        public String toString() {
-            return "SourceFile{" + "fileName=" + fileName + ", type=" + type + '}';
-        }
-
-        @Override
-        public int compareTo(final SourceFile o) {
-            if (o == null) {
-                return -1;
-            }
-            return o.fileName.compareTo(fileName);
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 53 * hash + Objects.hashCode(this.fileName);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final SourceFile other = (SourceFile) obj;
-            if (!Objects.equals(this.fileName, other.fileName)) {
-                return false;
-            }
-            return true;
-        }
-
-        public InputStream getInputStream() {
+        public InputStream getInputStream() throws FileNotFoundException {
             return streamGetter.getStream();
+        }
+        public String getType() {
+            return type;
         }
     }
 
@@ -132,8 +73,7 @@ public class SourceFiles {
     public final String rootDir;
 
     public SourceFiles() {
-        this.rootDir = null;
-        this.sourceFiles = null;
+        this(null);
     }
 
     public SourceFiles(final String rootDir) {
@@ -152,8 +92,8 @@ public class SourceFiles {
         this.sourceFiles = sourceFiles;
     }
 
-    public SourceFiles addSourceFile(final String path, final String type, final StreamGetter streamGetter) {
-        this.sourceFiles.add(new SourceFile(path, type, streamGetter));
+    public SourceFiles addSourceFile(final String type, final StreamGetter streamGetter) {
+        this.sourceFiles.add(new SourceFile(type, streamGetter));
         return this;
     }
 

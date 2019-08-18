@@ -7,6 +7,9 @@ import base.parsergen.AbstractBuilderFromSource;
 import base.parsergen.DeprecatedDelimitedBuilder;
 import base.parsergen.csv.DeprecatedCSVParserGenerator;
 import base.parsergen.rules.ParseRuleSet;
+import base.v3.AbstractApplicationBuilder;
+import base.v3.CSVApplicationBuilder;
+
 import java.io.IOException;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -14,25 +17,17 @@ import java.util.Set;
 public abstract class DeprecatedCSVGenTest extends XMLGenTest {
 
     @Override
-    final protected AbstractBuilderFromSource getBuilder() throws IOException {
-        return AbstractBuilderFromSource.run(new DeprecatedDelimitedBuilder(
-                new ParseRuleSet(getOrg(),
-                        getModelAugmenterI(),
-                        getElemModelMethods(),
-                        getTypeSetsI(),
-                        getTypeRenamerI(),
-                        getSourceFiles(),
-                        allowMissingAttributes(),
-                        getConstraints()),
-                 new DeprecatedCSVParserGenerator()
-        ));
+    protected AbstractApplicationBuilder getApplicationBuilder() throws IOException {
+        // TODO May need to use the deprecated version
+        return new CSVApplicationBuilder(getOrg(), getSourceFiles(), getExportDir());
     }
 
+
     @Override
-    public Set<ModelGen.ModelMethodGenerator> getElemModelMethods() {
-        final Set<ModelGen.ModelMethodGenerator> elemModelMethods = new LinkedHashSet<>();
-        elemModelMethods.add(new FromCSVGeneratorDeprecated());
-        elemModelMethods.add(new ConstructorGenerator());
-        return elemModelMethods;
+    protected void applyOverrides(final AbstractApplicationBuilder abstractApplicationBuilder) {
+        abstractApplicationBuilder.addElemModelMethods(new FromCSVGeneratorDeprecated())
+                .addElemModelMethods(new ConstructorGenerator());
     }
+
 }
+

@@ -1,62 +1,55 @@
 package fullsuite;
 
-import base.application.ApplicationBuilder;
 import base.dl.methodgenerators.InsertObject;
 import base.dl.methodgenerators.InsertRaw;
-import base.gen.DLGen;
-import base.gen.ModelGen;
-import base.parsergen.rules.ModelAugmenterI;
-import base.parsergen.rules.ModelTransformerI;
-import base.parsergen.rules.SourceFiles;
-import base.parsergen.rules.TypeRenamerI;
-import base.parsergen.rules.TypeSetsI;
-import base.parsergen.XMLBuilder;
-import base.model.AbstractModel;
-import base.model.Constraint;
-import base.model.PrimitiveField;
 import base.model.methodgenerators.AttributeBasedFromElemMethodGenerator;
 import base.model.methodgenerators.ConstructorGenerator;
 import base.model.methodgenerators.DerivedModelConstructorGenerator;
-import base.parsergen.AbstractBuilderFromSource;
-import base.parsergen.rules.ParseRuleSet;
-import base.util.FileUtil;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-
+import base.parsergen.rules.SourceFiles;
+import base.v3.AbstractApplicationBuilder;
+import base.v3.XMLApplicationBuilder;
 import base.workflow.Helpers;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
+
 
 public abstract class XMLGenTest {
 
-    public abstract String getOrg();
 
-    public abstract String getYAMLSource();
+    protected abstract String getBaselineDir();
 
-    public abstract String getBaselineDir();
+    protected abstract String getYAMLSource();
 
-    public abstract ModelAugmenterI getModelAugmenterI();
+    protected abstract void applyOverrides(AbstractApplicationBuilder abstractApplicationBuilder);
 
-    public abstract TypeSetsI getTypeSetsI();
+    protected String getExportDir() {
+        return "/tmp/project_test_out";
+    }
 
-    public abstract ModelTransformerI getModelTransformerI();
+    protected String getOrg() {
+        return "no.org.set";
+    }
 
     protected SourceFiles getSourceFiles() throws IOException {
-        final String yamlAsString = Helpers.resourceAsString(getClass(),getYAMLSource());
+        final String yamlAsString = Helpers.resourceAsString(getClass(), getYAMLSource());
+        System.out.println("YAML String is " + yamlAsString);
         final Map<String, Object> config = (Map<String, Object>) new Yaml().load(yamlAsString);
         final String rootDir = (String) config.get("rootDir");
         final SourceFiles sourceFiles = new SourceFiles(rootDir);
 
-        for(final Map<String, String> sourceFileAsMap : (Collection<Map<String, String>>) config.get("sourceFiles")) {
+        for (final Map<String, String> sourceFileAsMap : (Collection<Map<String, String>>) config.get("sourceFiles")) {
 
             final String fileName = sourceFileAsMap.get("fileName");
             final String type = sourceFileAsMap.get("type");
 
-            sourceFiles.addSourceFile(fileName, type, () -> {
+            sourceFiles.addSourceFile(type, () -> {
                 final String resourcePath = rootDir + "/" + fileName;
+                System.out.println("Resource path is " + resourcePath);
                 return XMLGenTest.class.getClassLoader().getResourceAsStream(resourcePath);
             });
         }
@@ -64,110 +57,36 @@ public abstract class XMLGenTest {
         return sourceFiles;
     }
 
-    protected AbstractBuilderFromSource getBuilder() throws IOException {
-        return AbstractBuilderFromSource.run(new XMLBuilder(
-                new ParseRuleSet(getOrg(),
-                        getModelAugmenterI(),
-                        getElemModelMethods(),
-                        getTypeSetsI(),
-                        getTypeRenamerI(),
-                        getSourceFiles(),
-                        allowMissingAttributes(),
-                        getConstraints())
-        ));
-    }
 
-    public TypeRenamerI getTypeRenamerI() {
-        return TypeRenamerI.DEFAULT_RENAMER;
-    }
-
-    public Set<ModelGen.ModelMethodGenerator> getElemModelMethods() {
-        final Set<ModelGen.ModelMethodGenerator> elemModelMethods = new LinkedHashSet<>();
-        elemModelMethods.add(new AttributeBasedFromElemMethodGenerator());
-        elemModelMethods.add(new ConstructorGenerator());
-        return elemModelMethods;
-    }
-
-    public Set<ModelGen.ModelMethodGenerator> getMergedModelMethods() {
-        final Set<ModelGen.ModelMethodGenerator> mergedModelMethods = new LinkedHashSet<>();
-        mergedModelMethods.add(new ConstructorGenerator());
-        mergedModelMethods.add(new DerivedModelConstructorGenerator());
-        return mergedModelMethods;
-    }
-
-    public Set<DLGen.DLMethodGenerator> getMergedDLMethods() {
-        final Set<DLGen.DLMethodGenerator> mergedDLMethods = new LinkedHashSet<>();
-        mergedDLMethods.add(new InsertRaw());
-        mergedDLMethods.add(new InsertObject());
-        return mergedDLMethods;
+    protected AbstractApplicationBuilder getApplicationBuilder() throws IOException {
+        return new XMLApplicationBuilder(getOrg(), getSourceFiles(), getExportDir());
     }
 
     @Test
     final public void runTest() throws FileNotFoundException, InterruptedException, IOException {
 
-        final String exportDir = getExportDir();
-        System.out.println("Export dir is " + exportDir);
-        FileUtil.deleteDir(new File(exportDir));
+        final AbstractApplicationBuilder abstractApplicationBuilder
+                = getApplicationBuilder()
+                .addMergedModelMethod(new ConstructorGenerator())
+                .addElemModelMethods(new AttributeBasedFromElemMethodGenerator())
+                .addElemModelMethods(new ConstructorGenerator())
+                .addMergedModelMethod(new DerivedModelConstructorGenerator())
+                .addMergedDLModelMethod(new InsertRaw())
+                .addMergedDLModelMethod(new InsertObject());
+
+
+        applyOverrides(abstractApplicationBuilder);
+
+        abstractApplicationBuilder.build();
 
         final String baselineDir = getBaselineDir();
 
-        final AbstractBuilderFromSource builder
-                = getBuilder();
-
-        if (getAutoGenTypeSet()) {
-            for (final AbstractModel model : builder.getElemModels()) {
-                for (final PrimitiveField f : model.getSimplePrimitiveFields()) {
-                    final String className = f.getJavaClassName();
-                    final String type;
-                    if (className.endsWith("Id")) {
-                        type = "LONG";
-                    } else if (className.endsWith("Score")) {
-                        type = "INT";
-                    } else {
-                        type = "STRING";
-                    }
-                    System.out.println(type + "_SET.add(\"" + className + "\"); // Nullable: " + f.nullable());
-                }
-            }
-
-        }
-
-        System.out.println(builder.getElemModelMap());
-        ApplicationBuilder.buildElementParserAndLayerModels(getOrg(),
-                builder.getElemModelMap(),
-                builder.getGenedParsers(),
-                getModelAugmenterI(),
-                getModelTransformerI(),
-                getMergedModelMethods(),
-                getMergedDLMethods(),
-                builder.getAntEntries().iterator().next(),
-                exportDir);
-
-        ApplicationBuilder.convertToSqlServer(
-                getExportDir()
-                        + "/application/sql/schema.sql",
-                getExportDir()
-                        + "/application/sql/schema.sql");
-
-        if (!getAutoGenTypeSet()) {
-            FullSuite.runDiff(baselineDir, exportDir);
-        }
-    }
-
-    public String getExportDir() {
-        return "/tmp/project_test_out";
-    }
-
-    public boolean getAutoGenTypeSet() {
-        return false;
-    }
-
-    public boolean allowMissingAttributes() {
-        return true;
-    }
-
-    protected Set<Constraint> getConstraints() {
-        return Collections.singleton(Constraint.NOT_NULL);
+        // if (!getAutoGenTypeSet()) {
+        // Previously had switch in for discovery mode
+        // should expose this via something like abstractApplicationBuilder.analyze()
+        FullSuite.runDiff(getBaselineDir(), getExportDir());
+        //}
     }
 
 }
+

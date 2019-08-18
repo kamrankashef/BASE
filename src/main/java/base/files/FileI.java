@@ -1,21 +1,12 @@
 package base.files;
 
-import base.util.DBUtil;
 import kamserverutils.common.util.IOUtil;
 
-import static base.util.StreamUtil.getProjectFile;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.jar.JarInputStream;
-import java.util.zip.ZipEntry;
 
 final public class FileI {
 
@@ -57,51 +48,10 @@ final public class FileI {
 
     public static String COMMON_PKG = "common";
 
+    // Common files are now handled via copy out of resources/mvn_scaffolding
+    // The model inference layer needs an overhaul before getting rid of this.
     private static Map<String, String> allCommonFile() throws IOException {
-        final Map<String, String> map = new HashMap<>();
-
-        final Enumeration<URL> urls = Thread.currentThread().
-                getContextClassLoader().
-                getResources(LOCAL_COMMON_PATH);
-
-        urls.hasMoreElements();
-        final String path = urls.nextElement().toString();
-
-        final Collection<String> entries = new LinkedList<>();
-        if (path.contains("jar:")) {
-
-            final String jarPath = DBUtil.class
-                    .getProtectionDomain()
-                    .getCodeSource()
-                    .getLocation()
-                    .toString()
-                    .replace("!/", "")
-                    .replace("jar:file:", "");
-            final JarInputStream jis = new JarInputStream(new FileInputStream(jarPath));
-            while (true) {
-                final ZipEntry e = jis.getNextEntry();
-                if (e == null) {
-                    break;
-                }
-                entries.add(e.getName());
-            }
-        } else {
-            final File resourceDir = new File(path.replace("file:", ""));
-            for (final File f : resourceDir.listFiles()) {
-                entries.add(LOCAL_COMMON_PATH + f.getName());
-            }
-        }
-
-        for (final String fileName : entries) {
-            // TODO exclude directoires
-            if (fileName.startsWith(LOCAL_COMMON_PATH)
-                    && fileName.endsWith("txt")
-                    && !fileName.replace(LOCAL_COMMON_PATH, "").contains("/")) {
-                final String fileAsStr = pkgReplacement(getProjectFile(fileName), COMMON_PKG);
-                map.put("src/" + COMMON_PKG + "/" + fileName.replaceAll("txt$", "java"), fileAsStr);
-            }
-        }
-        return map;
+        return new HashMap<>();
     }
 
 

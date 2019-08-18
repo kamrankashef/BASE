@@ -16,7 +16,7 @@ public class ModelGen {
 
         public String genMethod(AbstractModel model, final String parentPackage);
 
-        public Set< String> requiredImports();
+        public Set<String> requiredImports();
     }
 
     public static String toModelClassGen2(
