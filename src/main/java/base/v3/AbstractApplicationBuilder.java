@@ -8,7 +8,6 @@ import base.model.AbstractModel;
 import base.model.Constraint;
 import base.model.PrimitiveField;
 import base.parsergen.AbstractBuilderFromSource;
-import base.parsergen.XMLBuilder;
 import base.parsergen.rules.*;
 import base.parsergen.rules.impl.StatefulTypeSetGuesser;
 import base.util.FileUtil;
@@ -16,7 +15,6 @@ import base.util.FileUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -95,6 +93,12 @@ public abstract class AbstractApplicationBuilder {
 
     // ********** Methods Generated ********** //
 
+    public AbstractApplicationBuilder clearMethodGenerators() {
+        elemModelMethods.clear();
+        mergedModelMethods.clear();
+        dlMethods.clear();
+        return this;
+    }
 
     public AbstractApplicationBuilder addElemModelMethods(final ModelGen.ModelMethodGenerator modelMethodGenerator) {
         elemModelMethods.add(modelMethodGenerator);
@@ -182,3 +186,4 @@ public abstract class AbstractApplicationBuilder {
     }
 
 }
+
