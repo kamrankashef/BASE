@@ -1,6 +1,0 @@
-
-# Called at the command line to turn lines like
-# hi("blah")
-# to 
-# hi("Blah") 
-cat foo | ruby -e 'ARGF.each_line { |l| l.chop.sub(/(".)/,"\\1"); puts l.chop.sub(/(".)/, $1.upcase)}'
