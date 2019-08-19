@@ -17,7 +17,7 @@ import java.io.InputStream;
 /**
  * Not too interesting, because we are doing the very minimum and not specifying model and datalayer methods to generate
  */
-public class MostBasic {
+public class Basic {
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
