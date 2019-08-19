@@ -7,6 +7,7 @@ how objects and attributes are named, typing and combining/mutating objects and 
 
 - [Setup](#setup)
 - [Examples](#examples)
+  - [v3 Builder Example]
   - [CSV Parser](#csv-parser)
   - [XML Parser](#xml-parser)
 - [What's Coming Next](#whats-coming-next)
@@ -33,23 +34,23 @@ place to start learning BASE.
 
 The examples are shown through BASE's [parse generator regression test suite](https://github.com/kamrankashef/BASE/tree/master/src/test/java/base/parsegen).
 
-The tests can be modified to create newly generated ETL applications.  The most interesting methods to redefine are
-
-- `getOrg` which lets you specify your target package name (e.g. `com.yourcompany.etl`)
-- `getModelTransformerI` which allows you to modify, create and combine models.
-
-- `getYAMLSource` which is where in the resource directory your config file can be found.  This file specifies where
- your example data file is located.
-
-When you modify a test, the test will break because the output will not match what is expected.
-
-By default, your project will get exported to a Maven project in `/tmp/project_test_out/application`.
-Calling `mvn compile` will verify your code's consistency.  You can modify the target directory by
-overriding `public String getExportDir()` in the Test.
+#### v3 XML ApplicationBuilder Example
 
 
+[This example](https://github.com/kamrankashef/BASE/blob/master/src/test/java/examples/Basic.java)
+shows a subset of BASE's features.  It can be run from BASE's home directory and will export a
+generated application to ` System.getProperty("user.home") + "/sample_base_project/application"`.
 
-#### CSV Parser
+
+```bash
+mvn test-compile
+mvn compile exec:java \
+  -Dexec.mainClass="examples.Basic" \
+  -Dexec.classpathScope=test \
+  -Dexec.args=src/test/resources/base/parsegen/xml/hospitallog/hospital-log.xml
+  ```
+
+#### CSV Parser Example
 The [the Player Scouting example](https://github.com/kamrankashef/BASE/blob/master/src/test/java/base/parsegen/csv/playerscouting/TestPlayerScoutingCSV.java), we are given an a [CSV document](https://github.com/kamrankashef/BASE/blob/master/src/test/resources/base/parsegen/csv/playerscouting/sample-export.csv) with over 40 fields.  A little custom behavior is specified, such as adding date-typed verions of some fields in `getModelAugmenterI`, using a special naming functions that can convert field names like `Shot %` to `shot_p` and specify `playerscouting` as the name of our desired export package.
 
 Running the test provides this [Maven application](https://github.com/kamrankashef/BASE/tree/master/expected_out/player_scouting/application).
@@ -57,7 +58,7 @@ The user can the go into the [generated parser](https://github.com/kamrankashef/
 and determine where to invoke the `insert` method from the 
 [generated persistence-layer](https://github.com/kamrankashef/BASE/blob/master/expected_out/player_scouting/application/src/main/java/playerscouting/derived/datalayer/PlayerScoutingDL.java).
 
-#### XML Parser 
+#### XML Parser Example
 
 The [Hospital Log example](https://github.com/kamrankashef/BASE/blob/master/src/test/java/base/parsegen/xml/hospitalevents/TestHospitalEvents.java)
 shows some of BASE's more advnaced features:

@@ -56,6 +56,6 @@ public class Basic {
         // Export Maven project with Elem, Merged Model and data layer classes along with supporting class and SQL
         // schema file defining the backing tables for the Merged Models
         appBuilder.build();
-        System.out.println("In '" + exportDir + "' perform mvn compile");
+        System.out.println("In '" + exportDir + "/application' perform mvn compile");
     }
 }
