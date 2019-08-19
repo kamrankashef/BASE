@@ -10,9 +10,7 @@ import base.v3.AbstractApplicationBuilder;
 import base.v3.XMLApplicationBuilder;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Take an XML document and build application
