@@ -7,9 +7,9 @@ how objects and attributes are named, typing and combining/mutating objects and 
 
 - [Setup](#setup)
 - [Examples](#examples)
-  - [v3 Builder Example]
-  - [CSV Parser](#csv-parser)
-  - [XML Parser](#xml-parser)
+  - [v3 Builder Example](#v3-xml-applicationbuilder-example)
+  - [CSV Parser](#csv-parser-example)
+  - [XML Parser](#xml-parser-example)
 - [What's Coming Next](#whats-coming-next)
 - [Phases of Execution](#phases-of-execution)
 
