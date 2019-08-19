@@ -1,5 +1,10 @@
 package examples;
 
+import base.dl.methodgenerators.InsertObject;
+import base.dl.methodgenerators.InsertRaw;
+import base.model.methodgenerators.AttributeBasedFromElemMethodGenerator;
+import base.model.methodgenerators.ConstructorGenerator;
+import base.model.methodgenerators.DerivedModelConstructorGenerator;
 import base.parsergen.rules.SourceFiles;
 import base.v3.AbstractApplicationBuilder;
 import base.v3.XMLApplicationBuilder;
@@ -34,6 +39,24 @@ public class MostBasic {
         // Create an XML builder
         final AbstractApplicationBuilder appBuilder = new XMLApplicationBuilder("com.example", sourceFiles, exportDir);
 
+
+        // Auto-generate methods for the generated classes
+        appBuilder
+                // Generate method to extract ElemModel from XML block
+                .addElemModelMethods(new AttributeBasedFromElemMethodGenerator())
+                // Simple constructor that maps to the parsed elements
+                .addElemModelMethods(new ConstructorGenerator())
+                // Merged Model Constructor that takes an argument for each of its fields
+                .addMergedModelMethod(new ConstructorGenerator())
+                // Merged Model Constructor that take ElemModels as its arguments
+                .addMergedModelMethod(new DerivedModelConstructorGenerator())
+                // Data access layer insert method that takes an argument for each field
+                .addMergedDLModelMethod(new InsertRaw())
+                // Data access layer insert method that takes a Merged Model as its argument
+                .addMergedDLModelMethod(new InsertObject());
+
+        // Export Maven project with Elem, Merged Model and data layer classes along with supporting class and SQL
+        // schema file defining the backing tables for the Merged Models
         appBuilder.build();
         System.out.println("In '" + exportDir + "' perform mvn compile");
     }
