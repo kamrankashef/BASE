@@ -41,10 +41,10 @@ public class DeleteById implements DLMethodGenerator {
         final SourceBuilder bldr = new SourceBuilder();
 
         // def:DELETE_BY_GUID
-        bldr.appendln(1, "private static final String " + this.queryName)
+        bldr.appendln(1, "private String " + this.queryName)
                 .append(3, "= ")
                 .appendln("\"DELETE FROM \"")
-                .appendln(3, "+ TABLE_NAME")
+                .appendln(3, "+ tableName()")
                 .append(3, "+ \" WHERE\" ");
         int index = 0;
         for (final PrimitiveField field : this.fields) {
@@ -56,7 +56,7 @@ public class DeleteById implements DLMethodGenerator {
                 .appendln();
 
         // Delete
-        bldr.append(1, "public static void ").append(functionName).appendln("(")
+        bldr.append(1, "public void ").append(functionName).appendln("(")
                 .appendln(3, "final Connection conn,");
         // params
         index = 0;
