@@ -60,10 +60,6 @@ public class TestHospitalEvents extends XMLGenTest {
                 (pkg, models, modelAugmenter, mergedModelMethods, mergedDLMethods) -> {
                     final PrimitiveField customAttribute = new PrimitiveField("customAttribute", PrimitiveType.TINY_TEXT);
 
-                    final PrimitiveField[] players = {
-                            new PrimitiveField("_employee1ID", PrimitiveType.INT),
-                            new PrimitiveField("_employee2ID", PrimitiveType.INT)};
-
                     final List<AbstractModel> derivedModels = new LinkedList<>();
                     final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, modelAugmenter, mergedModelMethods, mergedDLMethods, preserveConstraints);
 
