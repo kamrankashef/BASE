@@ -61,7 +61,7 @@ and determine where to invoke the `insert` method from the
 #### XML Parser Example
 
 The [Hospital Log example](https://github.com/kamrankashef/BASE/blob/master/src/test/java/base/parsegen/xml/hospitalevents/TestHospitalEvents.java)
-shows some of BASE's more advnaced features:
+shows some of BASE's more advanced features:
 
 - Creating "augmented" Model attributes (creating new attributes from inferred attributes).  See how `localTimeAug` is defined.
 - Adjoining Models (combining Models to create new Models).  See how `Event`, `ShiftEnd`, `Meeting` and `Surgery`
