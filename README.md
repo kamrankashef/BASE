@@ -43,8 +43,7 @@ generated application to ` System.getProperty("user.home") + "/sample_base_proje
 
 
 ```bash
-mvn test-compile
-mvn compile exec:java \
+mvn test-compile exec:java \
   -Dexec.mainClass="examples.Basic" \
   -Dexec.classpathScope=test \
   -Dexec.args=src/test/resources/base/parsegen/xml/hospitallog/hospital-log.xml
