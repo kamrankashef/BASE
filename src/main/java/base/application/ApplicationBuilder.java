@@ -9,7 +9,6 @@ import base.parsergen.rules.ModelAugmenterI;
 import base.parsergen.rules.ModelTransformerI;
 import base.model.CRUDAction;
 import base.model.AbstractModel;
-import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 
 import java.io.BufferedReader;
@@ -92,23 +91,27 @@ public class ApplicationBuilder {
 
     }
 
-    private final ApplicationDescription application;
+    // private final ApplicationDescription application;
 
-    public boolean buildAPI = true;
-    final private String srcDir = "src/main/java";
+    final private static String SRC_DIR = "src/main/java";
 
-    public ApplicationBuilder(final ApplicationDescription application) {
-        this.application = application;
-    }
+    // public ApplicationBuilder(final ApplicationDescription application) {
+    //    this.application = application;
+    // }
 
-    public Map<String, String> buildClasses() throws IOException {
+    public static Map<String, String> buildClasses(final Collection<AbstractModel> elemModels,
+                                            final Collection<ModelGen.ModelMethodGenerator> elemModelMethods,
+                                            final Collection<AbstractModel> derivedModels,
+                                            final Collection<ModelGen.ModelMethodGenerator> derivedModelMethods,
+                                            final Collection<DLGen.DLMethodGenerator> derivedModelDLMethods,
+                                            final boolean buildAPI) throws IOException {
 
         final Map<String, String> classes = new LinkedHashMap<>();
 
-        for (final AbstractModel m : application.models) {
+        for (final AbstractModel m : derivedModels) {
             if (buildAPI) {
                 for (final CRUDAction action : CRUDAction.values()) {
-                    final String fileName = this.srcDir
+                    final String fileName = SRC_DIR
                             + "/"
                             + m.getServicePackage().replaceAll("\\.", "/")
                             + "/"
@@ -118,14 +121,16 @@ public class ApplicationBuilder {
 
                 }
             }
-            final String destPath = this.srcDir + "/"
+            final String destPath = SRC_DIR + "/"
                 + m.getModelPackage().replaceAll("\\.", "/") + "/" + m.getJavaClassName() + ".java";
-            classes.put(destPath, ModelGen.toModelClass(m));
+            classes.put(destPath, ModelGen.toModelClassGen2("", m, derivedModelMethods));
+            classes.put(SRC_DIR + "/" + m.getDlPackage().replaceAll("\\.", "/") + "/" + m.dlName() + ".java",
+                    DLGen.toDLClass2("", m, derivedModelDLMethods));
         }
-        for (final AbstractModel m : application.models) {
-            if (!m.getDLMethodGenerators().isEmpty()) {
-                classes.put(this.srcDir + "/" + m.getDlPackage().replaceAll("\\.", "/") + "/" + m.dlName() + ".java", DLGen.toDLClass(m));
-            }
+        for (final AbstractModel m : elemModels) {
+            final String destPath = SRC_DIR + "/"
+                    + m.getModelPackage().replaceAll("\\.", "/") + "/" + m.getJavaClassName() + ".java";
+            classes.put(destPath, ModelGen.toModelClassGen2("", m, elemModelMethods));
         }
         return classes;
     }
@@ -150,6 +155,7 @@ public class ApplicationBuilder {
             final Map<String, String> additionalJavaFiles,
             final ModelAugmenterI modelAugmenter,
             final ModelTransformerI modelTransformer,
+            final Set<ModelGen.ModelMethodGenerator> elemModelMethods,
             final Set<ModelGen.ModelMethodGenerator> mergedModelMethods,
             final Set<DLGen.DLMethodGenerator> mergedDLMethods,
             final String mainsBuildXML,
@@ -161,28 +167,19 @@ public class ApplicationBuilder {
         final List<AbstractModel> derivedModels
                 = modelTransformer.getDerivedModels(org + ".derived", modelMap, modelAugmenter, mergedModelMethods, mergedDLMethods);
 
-        final LinkedList<AbstractModel> modelsToExport = new LinkedList<>();
-        modelsToExport.addAll(elemModels);
-        modelsToExport.addAll(derivedModels);
-
-        final ApplicationDescription app = new ApplicationDescription("application", org, modelsToExport);
-        ApplicationBuilder appBldr = new ApplicationBuilder(app);
-        appBldr.buildAPI = false;
         System.out.println("Building classes");
-        final Map<String, String> genFiles = appBldr.buildClasses();
-        genFiles.putAll(FileI.allBuildFile(app.org));
-
-        final Collection<AbstractModel> schemaModels = new LinkedList<>();
-        schemaModels.addAll(modelsToExport);
+        final Map<String, String> genFiles = ApplicationBuilder.buildClasses(elemModels, elemModelMethods, derivedModels, mergedModelMethods, new LinkedList<>(mergedDLMethods), false);
+        genFiles.putAll(FileI.allBuildFile(org));
 
         final SchemaGen schemaGen = new SchemaGen(SchemaGen.DBVendor.MYSQL);
-        final String schema = schemaGen.buildSchema(app.name.toLowerCase(), schemaModels);
+        final String appName = "application";
+        final String schema = schemaGen.buildSchema(appName, derivedModels);
         if(schema.isEmpty()) {
             System.err.println("Empty schema!");
         }
         genFiles.put("sql/schema.sql", schema);
         genFiles.putAll(additionalJavaFiles);
-        ApplicationBuilder.fileExporter(exportDir + "/" + app.name.toLowerCase(), genFiles);
+        ApplicationBuilder.fileExporter(exportDir + "/" + appName, genFiles);
     }
 
 }

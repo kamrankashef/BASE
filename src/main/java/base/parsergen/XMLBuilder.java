@@ -19,12 +19,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.parser.Parser;
 
-// To do fully need
-// 1 - source_files.yaml (user provided)
-// 2 - ModelAugmenterI instance (implementation defined in the exported project)
-// 3 - ModelTransformerI instance (implementation defined in the exported project)
-// 4 - TypeSetsI instance (implementation defined in the exported project)
-// Project is -
+
 final public class XMLBuilder extends AbstractBuilderFromSource {
 
     private final XMLToModels scanner;

@@ -6,7 +6,9 @@ import base.dl.methodgenerators.FromRs;
 import base.dl.methodgenerators.GetByGuid;
 import base.dl.methodgenerators.InsertObject;
 import base.dl.methodgenerators.InsertRaw;
+import base.gen.DLGen;
 import base.gen.JSAPIGen;
+import base.gen.ModelGen;
 import base.gen.SchemaGen;
 import base.model.AbstractModel;
 import base.model.methodgenerators.ConstructorGenerator;
@@ -17,6 +19,9 @@ import kamserverutils.common.util.FileUtil;
 import fullsuite.FullSuite;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Map;
 import org.junit.Test;
 
@@ -33,21 +38,21 @@ public class TestFromJson {
         final String asJson = FileUtil.fileToString(pathToJson);
 
         final ApplicationDescription app = ApplicationDescription.fromJson(asJson);
-        for (final AbstractModel model : app.models) {
 
-            model.addDLMethodGenerator(new FromRs());
-            model.addDLMethodGenerator(new GetByGuid());
-            model.addDLMethodGenerator(new InsertObject());
-            model.addDLMethodGenerator(new InsertRaw());
+        final Collection<ModelGen.ModelMethodGenerator> derivedModelMethods = new LinkedList<>();
+        derivedModelMethods.add(new ConstructorGenerator());
+        derivedModelMethods.add(new FromThirdPartyGenerator());
+        derivedModelMethods.add(new ToStringGenerator());
 
-            model.addModelMethodGenerator(new ConstructorGenerator());
-            model.addModelMethodGenerator(new FromThirdPartyGenerator());
-            model.addModelMethodGenerator(new ToStringGenerator());
-        }
+        final Collection<DLGen.DLMethodGenerator> derivedModelDLMethods = new LinkedList<>();
+        derivedModelDLMethods.add(new FromRs());
+        derivedModelDLMethods.add(new GetByGuid());
+        derivedModelDLMethods.add(new InsertObject());
+        derivedModelDLMethods.add(new InsertRaw());
 
-        ApplicationBuilder appBldr = new ApplicationBuilder(app);
 
-        final Map<String, String> genFiles = appBldr.buildClasses();
+        final Map<String, String> genFiles = ApplicationBuilder.buildClasses(Collections.EMPTY_SET, Collections.EMPTY_SET,
+                app.models, derivedModelMethods, derivedModelDLMethods,true);
 
 //        final String bcHome = System.getenv("BUILD_COMMONS_HOME");
 //        runCommand(bcHome + "/bin/scaffolder.rb", "web", exportHome, "orgname,modfoo,1.0.2", "javax.mail,mail,1.4.5:com.google.guava,guava,18.0");

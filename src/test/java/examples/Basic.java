@@ -80,7 +80,7 @@ public class Basic {
                     final PrimitiveField customAttribute = new PrimitiveField("customAttribute", PrimitiveType.TINY_TEXT);
 
                     final List<AbstractModel> derivedModels = new LinkedList<>();
-                    final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, modelAugmenter, mergedModelMethods, mergedDLMethods, false);
+                    final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, false);
 
                     // Prefixed with Z to not collide with inferred Meeting and Surgery types
                     // But it doesn't matter because both of these will be combined into the

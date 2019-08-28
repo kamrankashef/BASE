@@ -19,7 +19,7 @@ public class DLGen {
 
     public static String toDLClass2(final String parentPackage,
             final AbstractModel m,
-            final List<DLGen.DLMethodGenerator> dlGenerators) {
+            final Collection<DLGen.DLMethodGenerator> dlGenerators) {
         final SourceBuilder bldr = new SourceBuilder();
         bldr.append("package ").append(m.getExpanededDLPackage(parentPackage)).append(";\n\n");
 
@@ -91,6 +91,7 @@ public class DLGen {
         return bldr.toString();
     }
 
+    @Deprecated // Use toDLClass2
     public static String toDLClass(final AbstractModel m) {
         return toDLClass2("", m, m.getDLMethodGenerators());
     }

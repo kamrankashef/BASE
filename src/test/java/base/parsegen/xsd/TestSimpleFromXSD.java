@@ -31,7 +31,6 @@ public class TestSimpleFromXSD extends XMLGenTest {
 
     @Override
     protected void applyOverrides(final AbstractApplicationBuilder abstractApplicationBuilder) {
-        fail();
     }
 
 }

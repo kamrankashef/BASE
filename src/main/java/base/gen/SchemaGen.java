@@ -2,6 +2,7 @@ package base.gen;
 
 import base.model.AbstractField;
 import base.model.AbstractModel;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
@@ -23,7 +24,7 @@ public class SchemaGen {
     }
 
     final public String buildSchema(final String databaseName,
-            final Collection<AbstractModel> models) {
+                                    final Collection<AbstractModel> models) {
         String schema = "";
         schema += "-- DROP DATABASE IF EXISTS " + databaseName + ";\n"
                 + "-- CREATE DATABASE " + databaseName + ";\n"
@@ -37,17 +38,13 @@ public class SchemaGen {
                 + " IDENTIFIED BY 'password';\n\n";
 
         for (final AbstractModel m : models) {
-            if (!m.getDLMethodGenerators().isEmpty()) {
-                schema += "-- DROP TABLE " + m.toDBName() + ";\n";
-            }
+            schema += "-- DROP TABLE " + m.toDBName() + ";\n";
         }
 
         schema += "\n";
 
         for (final AbstractModel m : models) {
-            if (!m.getDLMethodGenerators().isEmpty()) {
-                schema += toSQLDef(m) + "\n\n";
-            }
+            schema += toSQLDef(m) + "\n\n";
         }
         return schema;
     }
@@ -87,7 +84,7 @@ public class SchemaGen {
         for (final List<AbstractField> key : model.getKeys()) {
             final Supplier<Stream<String>> fieldNames
                     = () -> key.stream()
-                            .map((fieldName) -> fieldName.toDBName());
+                    .map((fieldName) -> fieldName.toDBName());
 
             final String indexName = fieldNames.get().collect(Collectors.joining("_", "", "_idx"));
             final String fieldList = fieldNames.get().collect(Collectors.joining(", "));

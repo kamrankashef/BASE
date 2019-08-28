@@ -171,6 +171,7 @@ public abstract class AbstractApplicationBuilder {
                 builder.getGenedParsers(),
                 this.modelAugmenter,
                 this.modelTransformer,
+                this.elemModelMethods,
                 this.mergedModelMethods,
                 this.dlMethods,
                 builder.getAntEntries().iterator().next(),

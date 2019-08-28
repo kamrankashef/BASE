@@ -61,7 +61,7 @@ public class TestHospitalEvents extends XMLGenTest {
                     final PrimitiveField customAttribute = new PrimitiveField("customAttribute", PrimitiveType.TINY_TEXT);
 
                     final List<AbstractModel> derivedModels = new LinkedList<>();
-                    final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, modelAugmenter, mergedModelMethods, mergedDLMethods, preserveConstraints);
+                    final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, preserveConstraints);
 
                     final String meetingName = "ZMeeting";
                     final String surgeryName = "ZSurgery";
@@ -73,8 +73,6 @@ public class TestHospitalEvents extends XMLGenTest {
                         final String[] modelNames = {"Meeting", "Employee"};
                         final String[] prefixes = {"", "Employee"};
                         final AbstractModel meeting = adjoinModelUtil.adjoinModels(modelNames, prefixes, meetingName, models);
-                        // TODO This might not be needed any longer
-                        meeting.getDLMethodGenerators().clear();
                         eventSubModels.put(meetingName, meeting);
                         derivedModels.add(meeting);
                     }
@@ -82,8 +80,6 @@ public class TestHospitalEvents extends XMLGenTest {
                         final String[] modelNames = {"Surgery", "Group", "Employee"};
                         final String[] prefixes = {"", "Group", "Employee"};
                         final AbstractModel surgery = adjoinModelUtil.adjoinModels(modelNames, prefixes, surgeryName, models);
-                        // TODO This might not be needed any longer
-                        surgery.getDLMethodGenerators().clear();
                         eventSubModels.put(surgeryName, surgery);
                         derivedModels.add(surgery);
                     }

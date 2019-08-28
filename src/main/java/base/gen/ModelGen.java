@@ -4,11 +4,7 @@ import base.model.AbstractField;
 import base.model.AbstractModel;
 import base.model.PrimitiveField;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class ModelGen {
 
@@ -22,7 +18,7 @@ public class ModelGen {
     public static String toModelClassGen2(
             final String parentPackage,
             final AbstractModel model,
-            final List<ModelGen.ModelMethodGenerator> modelGenerators) {
+            final Collection<ModelMethodGenerator> modelGenerators) {
         final String _package = model.getExpanededModelPackage(parentPackage);
         final Set<String> imported = new HashSet<>();
         final SourceBuilder bldr = new SourceBuilder();
@@ -77,6 +73,7 @@ public class ModelGen {
         return bldr.toString();
     }
 
+    @Deprecated // Use toModelClassGen2
     public static String toModelClass(final AbstractModel model) throws IOException {
 
         return toModelClassGen2("",

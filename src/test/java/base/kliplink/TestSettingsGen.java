@@ -82,15 +82,6 @@ public class TestSettingsGen {
         mergedDLMethods.add(new HardDeleteByGuid()); // Need to change to delete by special keys
         mergedDLMethods.add(new InsertRaw());
 
-        for (final AbstractModel model : modelMap.values()) {
-            for (final DLGen.DLMethodGenerator dlGen : mergedDLMethods) {
-                model.addDLMethodGenerator(dlGen);
-            }
-            for (final ModelGen.ModelMethodGenerator methodGen : mergedModelMethods) {
-                model.addModelMethodGenerator(methodGen);
-            }
-        }
-
         final Map<String, String> additionalJavaFiles = Collections.EMPTY_MAP;
 
         final String mainsBuildXML = "";
@@ -100,6 +91,7 @@ public class TestSettingsGen {
                 additionalJavaFiles,
                 ModelAugmenterI.EMPTY_AUGMENTER,
                 ModelTransformerI.EMPTY_TRANSFORMER,
+                Collections.EMPTY_SET,
                 mergedModelMethods,
                 mergedDLMethods,
                 mainsBuildXML,
