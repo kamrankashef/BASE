@@ -82,46 +82,26 @@ public class Basic {
                     final List<AbstractModel> derivedModels = new LinkedList<>();
                     final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, false);
 
-                    // Prefixed with Z to not collide with inferred Meeting and Surgery types
-                    // But it doesn't matter because both of these will be combined into the
-                    // Event type.
-                    final String meetingName = "ZMeeting";
-                    final String surgeryName = "ZSurgery";
-
-                    final Map<String, AbstractModel> eventSubModels = new HashMap<>();
-
-
-                    {
-                        // Combine the Meeting and Employee models
-                        final String[] modelNames = {"Meeting", "Employee"};
-                        // Do not prefix the Meeting attributes in the Model, but prefix the Employee attributes with
-                        // "employee".  E.g. Employee.id becomes ZMeeting.employeeId
-                        final String[] prefixes = {"", "Employee"};
-                        final AbstractModel meeting = adjoinModelUtil.adjoinModels(modelNames, prefixes, meetingName, models);
-                        // This keeps a DL for this intermediate Model from being generated
-                        meeting.getDLMethodGenerators().clear();
-                        eventSubModels.put(meetingName, meeting);
-                        derivedModels.add(meeting);
-                    }
-                    {
-                        final String[] modelNames = {"Surgery", "Group", "Employee"};
-                        final String[] prefixes = {"", "Group", "Employee"};
-                        final AbstractModel surgery = adjoinModelUtil.adjoinModels(modelNames, prefixes, surgeryName, models);
-                        surgery.getDLMethodGenerators().clear();
-                        eventSubModels.put(surgeryName, surgery);
-                        derivedModels.add(surgery);
-                    }
-
-                    final String[] modelNames = {"Event", "ShiftEnd", meetingName, surgeryName};
-                    final String[] prefixes = {"Event", "ShiftEnd", "Meeting", "Surgery"};
-
-                    // Models that can be adjoined as auto-built
-                    eventSubModels.put("ShiftEnd", models.get("ShiftEnd"));
-                    eventSubModels.put("Event", models.get("Event"));
+                    // Use the echoed model heirachy to determine how to stitch Elem Models into Derived Models
+                    // Xml:
+                    //    HospitalEvents: Date, EasternTimeZoneTime, Filename, Id, LocalTime, LocalTimeZone
+                    //       ErRotation: Hospital, Id
+                    //          Group: Code, Id, Name
+                    //             EmployeesEmpty:
+                    //                Employee: FName, Id, LName
+                    //          Event: EasternTimeZoneTime, Id, LocalDate, LocalTime, Name, Number
+                    //             ShiftEnd: Summary
+                    //             Meeting: Description
+                    //                EmployeeMeeting: Id
+                    //             Surgery: Floor, RoomNumber
+                    //                GroupSurgery: Id, Role
+                    //                   EmployeeGroupSurgery: Id
+                    final String[] prefixes = {"Event", "ShiftEnd", "Meeting", "MeetingEmployee", "Surgery", "SurgeryGroup", "SurgeryEmployee"};
+                    final String[] modelNames = {"Event", "ShiftEnd", "Meeting", "EmployeeMeeting", "Surgery", "GroupSurgery", "EmployeeGroupSurgery"};
 
                     final AbstractModel adjoinedModel
                             = adjoinModelUtil.adjoinModels(
-                            modelNames, prefixes, "Event", eventSubModels, customAttribute);
+                            modelNames, prefixes, "Event", models, customAttribute);
 
                     derivedModels.add(adjoinedModel);
 

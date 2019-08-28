@@ -12,17 +12,12 @@ final public class Event {
     public final String eventName;
     public final Integer eventNumber;
     public final String meetingDescription;
-    public final String meetingEmployeeFName;
     public final Long meetingEmployeeId;
-    public final String meetingEmployeeLName;
     public final String shiftEndSummary;
-    public final String surgeryEmployeeFName;
     public final Long surgeryEmployeeId;
-    public final String surgeryEmployeeLName;
     public final Integer surgeryFloor;
-    public final String surgeryGroupCode;
     public final Long surgeryGroupId;
-    public final String surgeryGroupName;
+    public final String surgeryGroupRole;
     public final String surgeryRoomNumber;
 
     // ConstructorGenerator
@@ -36,17 +31,12 @@ final public class Event {
             final String eventName,
             final Integer eventNumber,
             final String meetingDescription,
-            final String meetingEmployeeFName,
             final Long meetingEmployeeId,
-            final String meetingEmployeeLName,
             final String shiftEndSummary,
-            final String surgeryEmployeeFName,
             final Long surgeryEmployeeId,
-            final String surgeryEmployeeLName,
             final Integer surgeryFloor,
-            final String surgeryGroupCode,
             final Long surgeryGroupId,
-            final String surgeryGroupName,
+            final String surgeryGroupRole,
             final String surgeryRoomNumber) {
         this.eventUuid = eventUuid;
         this.customAttribute = customAttribute;
@@ -57,17 +47,12 @@ final public class Event {
         this.eventName = eventName;
         this.eventNumber = eventNumber;
         this.meetingDescription = meetingDescription;
-        this.meetingEmployeeFName = meetingEmployeeFName;
         this.meetingEmployeeId = meetingEmployeeId;
-        this.meetingEmployeeLName = meetingEmployeeLName;
         this.shiftEndSummary = shiftEndSummary;
-        this.surgeryEmployeeFName = surgeryEmployeeFName;
         this.surgeryEmployeeId = surgeryEmployeeId;
-        this.surgeryEmployeeLName = surgeryEmployeeLName;
         this.surgeryFloor = surgeryFloor;
-        this.surgeryGroupCode = surgeryGroupCode;
         this.surgeryGroupId = surgeryGroupId;
-        this.surgeryGroupName = surgeryGroupName;
+        this.surgeryGroupRole = surgeryGroupRole;
         this.surgeryRoomNumber = surgeryRoomNumber;
     }
 
@@ -75,9 +60,12 @@ final public class Event {
     public Event(
             final String customAttribute,
             final com.fakehospital.model.Event event,
-            final com.fakehospital.derived.model.ZMeeting zMeeting,
+            final com.fakehospital.model.Meeting meeting,
+            final com.fakehospital.model.EmployeeMeeting employeeMeeting,
             final com.fakehospital.model.ShiftEnd shiftEnd,
-            final com.fakehospital.derived.model.ZSurgery zSurgery) {
+            final com.fakehospital.model.Surgery surgery,
+            final com.fakehospital.model.EmployeeGroupSurgery employeeGroupSurgery,
+            final com.fakehospital.model.GroupSurgery groupSurgery) {
         this.eventUuid = common.ServiceUtil.getUUID();
         this.customAttribute = customAttribute;
         this.eventEasternTimeZoneTime = event.easternTimeZoneTime;
@@ -86,19 +74,14 @@ final public class Event {
         this.eventLocalTime = event.localTime;
         this.eventName = event.name;
         this.eventNumber = event.number;
-        this.meetingDescription = zMeeting.description;
-        this.meetingEmployeeFName = zMeeting.employeeFName;
-        this.meetingEmployeeId = zMeeting.employeeId;
-        this.meetingEmployeeLName = zMeeting.employeeLName;
+        this.meetingDescription = meeting.description;
+        this.meetingEmployeeId = employeeMeeting.id;
         this.shiftEndSummary = shiftEnd.summary;
-        this.surgeryEmployeeFName = zSurgery.employeeFName;
-        this.surgeryEmployeeId = zSurgery.employeeId;
-        this.surgeryEmployeeLName = zSurgery.employeeLName;
-        this.surgeryFloor = zSurgery.floor;
-        this.surgeryGroupCode = zSurgery.groupCode;
-        this.surgeryGroupId = zSurgery.groupId;
-        this.surgeryGroupName = zSurgery.groupName;
-        this.surgeryRoomNumber = zSurgery.roomNumber;
+        this.surgeryFloor = surgery.floor;
+        this.surgeryRoomNumber = surgery.roomNumber;
+        this.surgeryEmployeeId = employeeGroupSurgery.id;
+        this.surgeryGroupId = groupSurgery.id;
+        this.surgeryGroupRole = groupSurgery.role;
     }
 
 

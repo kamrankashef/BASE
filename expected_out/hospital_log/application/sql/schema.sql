@@ -17,17 +17,12 @@ CREATE TABLE event (
 ,event_name NVARCHAR(1024)
 ,event_number INT
 ,meeting_description NVARCHAR(1024)
-,meeting_employee_f_name NVARCHAR(1024)
 ,meeting_employee_id BIGINT
-,meeting_employee_l_name NVARCHAR(1024)
 ,shift_end_summary NVARCHAR(1024)
-,surgery_employee_f_name NVARCHAR(1024)
 ,surgery_employee_id BIGINT
-,surgery_employee_l_name NVARCHAR(1024)
 ,surgery_floor INT
-,surgery_group_code NVARCHAR(1024)
 ,surgery_group_id BIGINT
-,surgery_group_name NVARCHAR(1024)
+,surgery_group_role NVARCHAR(1024)
 ,surgery_room_number NVARCHAR(1024)
 ,created_at DATETIMEOFFSET NULL DEFAULT NULL
 ,modified_at DATETIMEOFFSET 
