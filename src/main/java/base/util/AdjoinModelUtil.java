@@ -1,19 +1,18 @@
 package base.util;
 
-import base.gen.DLGen;
-import base.gen.ModelGen;
+
 import base.model.AbstractModel;
 import base.model.Model;
 import base.model.PrimitiveField;
+
 import java.util.Map;
-import java.util.Set;
 
 public class AdjoinModelUtil {
 
     final public String org;
 
     // TODO Can this be removed?  Definitely seems like it
-    final boolean keepInheritConstraints;
+    final private boolean keepInheritConstraints;
 
     public AdjoinModelUtil(
             final String org) {
@@ -68,7 +67,7 @@ public class AdjoinModelUtil {
 
     // Base adjoin 1
     // TODO Refactor to consolidate logic
-    public AbstractModel adjoinModels(final String[] modelNames,
+    private AbstractModel adjoinModels(final String[] modelNames,
             final String[] prefixes,
             final String newName,
             final Map<String, AbstractModel> models,
@@ -83,9 +82,7 @@ public class AdjoinModelUtil {
             modelsArr[i] = model;
         }
 
-        final AbstractModel model = new Model(modelsArr, prefixes, keepInheritConstraints, org, newName, fieldsArr, fields);
-
-        return model;
+        return new Model(modelsArr, prefixes, keepInheritConstraints, org, newName, fieldsArr, fields);
     }
 
     // Base adjoin 2
@@ -98,17 +95,15 @@ public class AdjoinModelUtil {
             final PrimitiveField[] fieldsArr,
             final PrimitiveField... fields) {
 
-        final Model model = new Model(
+        return new Model(
                 new AbstractModel[]{models.get(modelName1), models.get(modelName2)},
                 new String[]{prefix1, prefix2},
                 org,
                 newName, fieldsArr, fields);
-
-        return model;
     }
 
     // Base adjoin 3
-    public AbstractModel adjoinFields(final String tranlastedBaseName,
+    private AbstractModel adjoinFields(final String tranlastedBaseName,
             final String newName,
             final Map<String, AbstractModel> models,
             final PrimitiveField[] fieldsArr,
@@ -118,8 +113,7 @@ public class AdjoinModelUtil {
             throw new RuntimeException("Could not find entry " + tranlastedBaseName + ".\nKnown keys are " + models.keySet());
         }
 
-        final AbstractModel model = new Model(new AbstractModel[]{models.get(tranlastedBaseName)}, new String[]{""}, keepInheritConstraints, org, newName, fieldsArr, fields);
-        return model;
+        return new Model(new AbstractModel[]{models.get(tranlastedBaseName)}, new String[]{""}, keepInheritConstraints, org, newName, fieldsArr, fields);
     }
 
 }

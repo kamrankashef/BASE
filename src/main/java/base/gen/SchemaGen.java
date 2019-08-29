@@ -11,13 +11,13 @@ import java.util.stream.Stream;
 
 public class SchemaGen {
 
-    final DBVendor dbVendor;
+    final private DBVendor dbVendor;
 
     public SchemaGen(final DBVendor dbVendor) {
         this.dbVendor = dbVendor;
     }
 
-    public static enum DBVendor {
+    public enum DBVendor {
         MYSQL,
         POSTGRES,
         SQLSERVER
@@ -49,7 +49,7 @@ public class SchemaGen {
         return schema;
     }
 
-    final public String toSQLDef(final AbstractModel model) {
+    final private String toSQLDef(final AbstractModel model) {
         final SourceBuilder bldr = new SourceBuilder();
 
         if (dbVendor.equals(DBVendor.POSTGRES)) {
@@ -84,7 +84,7 @@ public class SchemaGen {
         for (final List<AbstractField> key : model.getKeys()) {
             final Supplier<Stream<String>> fieldNames
                     = () -> key.stream()
-                    .map((fieldName) -> fieldName.toDBName());
+                    .map(AbstractField::toDBName);
 
             final String indexName = fieldNames.get().collect(Collectors.joining("_", "", "_idx"));
             final String fieldList = fieldNames.get().collect(Collectors.joining(", "));

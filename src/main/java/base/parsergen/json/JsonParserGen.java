@@ -29,23 +29,20 @@ public class JsonParserGen {
 
     private static final String SCHEMA = "nhl_web";
 
-    final static String ORG = "com.msg.nhl";
+    final private static String ORG = "com.msg.nhl";
 
     // Loop over exported JSON files and attempt to build model
     private static final String FILES_HOME = "/tmp/nhl_json";
 
-    final static ModelAugmenterI MODEL_AUGMENTER = new ModelAugmenterI() {
-        @Override
-        public Map<PrimitiveField, String> getAugmentedFields(final AbstractModel model) {
-            final Map<PrimitiveField, String> addedFields = new HashMap<>();
-            if (model.getJavaClassName().endsWith("GameElem")) {
-                final PrimitiveField _gameId = new PrimitiveField("_internalGameId", Constraint.NOT_NULL, PrimitiveType.LONG);
-                addedFields.put(_gameId, "common.NHLUtils.normalizedGameId(gameId)");
-                final PrimitiveField _season = new PrimitiveField("_season", Constraint.NOT_NULL, PrimitiveType.TINY_TEXT);
-                addedFields.put(_season, "common.NHLUtils.normalizedSeasonId(gameId)");
-            }
-            return addedFields;
+    final private static ModelAugmenterI MODEL_AUGMENTER = model -> {
+        final Map<PrimitiveField, String> addedFields = new HashMap<>();
+        if (model.getJavaClassName().endsWith("GameElem")) {
+            final PrimitiveField _gameId = new PrimitiveField("_internalGameId", Constraint.NOT_NULL, PrimitiveType.LONG);
+            addedFields.put(_gameId, "common.NHLUtils.normalizedGameId(gameId)");
+            final PrimitiveField _season = new PrimitiveField("_season", Constraint.NOT_NULL, PrimitiveType.TINY_TEXT);
+            addedFields.put(_season, "common.NHLUtils.normalizedSeasonId(gameId)");
         }
+        return addedFields;
     };
 
     public static void main(final String... args) throws IOException {

@@ -4,17 +4,17 @@ import base.model.AbstractField;
 import base.model.AbstractModel;
 import base.model.PrimitiveField;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
 public class DLGen {
 
-    public static interface DLMethodGenerator {
+    public interface DLMethodGenerator {
 
-        public String genMethod(AbstractModel model);
+        String genMethod(AbstractModel model);
 
-        public Collection<String> requiredImports(final AbstractModel m, final String parentPackage);
+        Collection<String> requiredImports(final AbstractModel m, final String parentPackage);
     }
 
     public static String toDLClass2(final String parentPackage,
@@ -26,15 +26,11 @@ public class DLGen {
         final Set<String> imports = new TreeSet<>();
 
         for (final PrimitiveField field : m.getPrimitiveFieldsWithLinked()) {
-            for (final String pkg : field.getType().requiredImports()) {
-                imports.add(pkg);
-            }
+            Collections.addAll(imports, field.getType().requiredImports());
         }
 
         for (final PrimitiveField field : m.getAugmentedFields().keySet()) {
-            for (final String pkg : field.getType().requiredImports()) {
-                imports.add(pkg);
-            }
+            Collections.addAll(imports, field.getType().requiredImports());
         }
 
         for (final DLGen.DLMethodGenerator dlGen : dlGenerators) {

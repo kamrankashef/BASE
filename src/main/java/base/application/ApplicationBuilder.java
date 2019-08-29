@@ -54,7 +54,7 @@ public class ApplicationBuilder {
 
         final Process p = Runtime.getRuntime().exec(cmdArr);
 
-        String line = null;
+        String line;
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(
                 p.getInputStream()));
         while ((line = stdInput.readLine()) != null) {
@@ -78,9 +78,9 @@ public class ApplicationBuilder {
 
         final Process p = Runtime.getRuntime().exec(cmdArr);
 
-        String line = null;
+        String line;
         try(BufferedReader stdInput = new BufferedReader(new InputStreamReader(
-                p.getInputStream()));) {
+                p.getInputStream()))) {
             while ((line = stdInput.readLine()) != null) {
                 System.out.println(">> " + line + "\n");
             }
@@ -104,7 +104,7 @@ public class ApplicationBuilder {
                                             final Collection<AbstractModel> derivedModels,
                                             final Collection<ModelGen.ModelMethodGenerator> derivedModelMethods,
                                             final Collection<DLGen.DLMethodGenerator> derivedModelDLMethods,
-                                            final boolean buildAPI) throws IOException {
+                                            final boolean buildAPI) {
 
         final Map<String, String> classes = new LinkedHashMap<>();
 
