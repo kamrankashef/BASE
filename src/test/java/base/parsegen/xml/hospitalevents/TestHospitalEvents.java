@@ -15,7 +15,7 @@ import java.util.Map;
 public class TestHospitalEvents extends XMLGenTest {
 
 
-    final boolean preserveConstraints = false;
+    final private boolean preserveConstraints = false;
 
     @Override
     public String getOrg() {

@@ -3,16 +3,15 @@ package base.gen;
 import base.model.AbstractField;
 import base.model.AbstractModel;
 import base.model.PrimitiveField;
-import java.io.IOException;
 import java.util.*;
 
 public class ModelGen {
 
-    public static interface ModelMethodGenerator {
+    public interface ModelMethodGenerator {
 
-        public String genMethod(AbstractModel model, final String parentPackage);
+        String genMethod(AbstractModel model, final String parentPackage);
 
-        public Set<String> requiredImports();
+        Set<String> requiredImports();
     }
 
     public static String toModelClassGen2(
@@ -26,15 +25,11 @@ public class ModelGen {
         final Set<String> imports = new TreeSet<>();
 
         for (final PrimitiveField field : model.getPrimitiveFieldsWithLinked()) {
-            for (final String pkg : field.getType().requiredImports()) {
-                imports.add(pkg);
-            }
+            Collections.addAll(imports, field.getType().requiredImports());
         }
 
         for (final PrimitiveField field : model.getAugmentedFields().keySet()) {
-            for (final String pkg : field.getType().requiredImports()) {
-                imports.add(pkg);
-            }
+            Collections.addAll(imports, field.getType().requiredImports());
         }
 
         for (final ModelMethodGenerator modGen : modelGenerators) {

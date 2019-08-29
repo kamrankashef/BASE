@@ -15,7 +15,7 @@ import java.util.Set;
 @FunctionalInterface
 public interface ModelTransformerI {
 
-    public static final ModelTransformerI EMPTY_TRANSFORMER
+    ModelTransformerI EMPTY_TRANSFORMER
             = (final String pkg,
                     final Map<String, AbstractModel> models,
                     final ModelAugmenterI modelAugmenter,
@@ -23,7 +23,7 @@ public interface ModelTransformerI {
                     final Set<DLGen.DLMethodGenerator> mergedDLMethods)
             -> Collections.EMPTY_LIST;
 
-    public static ModelTransformerI getSimplePassThroughElemTransformer(
+    static ModelTransformerI getSimplePassThroughElemTransformer(
             final Collection<String> modelNames,
             final PrimitiveField... fields) {
         return (final String pkg,
@@ -47,7 +47,7 @@ public interface ModelTransformerI {
         };
     }
 
-    public List<AbstractModel> getDerivedModels(
+    List<AbstractModel> getDerivedModels(
             final String pkg,
             final Map<String, AbstractModel> models,
             final ModelAugmenterI modelAugmenter,
