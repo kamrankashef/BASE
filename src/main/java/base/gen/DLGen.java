@@ -91,8 +91,5 @@ public class DLGen {
         return bldr.toString();
     }
 
-    @Deprecated // Use toDLClass2
-    public static String toDLClass(final AbstractModel m) {
-        return toDLClass2("", m, m.getDLMethodGenerators());
-    }
+
 }

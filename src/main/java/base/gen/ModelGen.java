@@ -73,13 +73,5 @@ public class ModelGen {
         return bldr.toString();
     }
 
-    @Deprecated // Use toModelClassGen2
-    public static String toModelClass(final AbstractModel model) throws IOException {
-
-        return toModelClassGen2("",
-                model,
-                model.getModelGenerators());
-
-    }
 
 }
