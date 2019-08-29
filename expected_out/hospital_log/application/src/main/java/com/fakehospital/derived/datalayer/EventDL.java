@@ -29,17 +29,12 @@ final public class EventDL {
             + ", event_name"
             + ", event_number"
             + ", meeting_description"
-            + ", meeting_employee_f_name"
             + ", meeting_employee_id"
-            + ", meeting_employee_l_name"
             + ", shift_end_summary"
-            + ", surgery_employee_f_name"
             + ", surgery_employee_id"
-            + ", surgery_employee_l_name"
             + ", surgery_floor"
-            + ", surgery_group_code"
             + ", surgery_group_id"
-            + ", surgery_group_name"
+            + ", surgery_group_role"
             + ", surgery_room_number"
             + ", created_at"
             + ", modified_at"
@@ -56,17 +51,12 @@ final public class EventDL {
             final String eventName,
             final Integer eventNumber,
             final String meetingDescription,
-            final String meetingEmployeeFName,
             final Long meetingEmployeeId,
-            final String meetingEmployeeLName,
             final String shiftEndSummary,
-            final String surgeryEmployeeFName,
             final Long surgeryEmployeeId,
-            final String surgeryEmployeeLName,
             final Integer surgeryFloor,
-            final String surgeryGroupCode,
             final Long surgeryGroupId,
-            final String surgeryGroupName,
+            final String surgeryGroupRole,
             final String surgeryRoomNumber) throws SQLException {
 
         final String INSERT
@@ -74,7 +64,7 @@ final public class EventDL {
                 + tableName()
                 + "(" + FIELDS + ")"
                 + " VALUES "
-                + "(" + DBUtil.questionMarks(24) + ")";
+                + "(" + DBUtil.questionMarks(19) + ")";
 
         try (final PreparedStatement ps = conn.prepareStatement(INSERT)) {
 
@@ -89,17 +79,12 @@ final public class EventDL {
             dBUtil.setNullableString(eventName);
             dBUtil.setNullableInt(eventNumber);
             dBUtil.setNullableString(meetingDescription);
-            dBUtil.setNullableString(meetingEmployeeFName);
             dBUtil.setNullableLong(meetingEmployeeId);
-            dBUtil.setNullableString(meetingEmployeeLName);
             dBUtil.setNullableString(shiftEndSummary);
-            dBUtil.setNullableString(surgeryEmployeeFName);
             dBUtil.setNullableLong(surgeryEmployeeId);
-            dBUtil.setNullableString(surgeryEmployeeLName);
             dBUtil.setNullableInt(surgeryFloor);
-            dBUtil.setNullableString(surgeryGroupCode);
             dBUtil.setNullableLong(surgeryGroupId);
-            dBUtil.setNullableString(surgeryGroupName);
+            dBUtil.setNullableString(surgeryGroupRole);
             dBUtil.setNullableString(surgeryRoomNumber);
             dBUtil.setNowTimestamp();
             dBUtil.setNowTimestamp();
@@ -126,17 +111,12 @@ final public class EventDL {
                 event.eventName,
                 event.eventNumber,
                 event.meetingDescription,
-                event.meetingEmployeeFName,
                 event.meetingEmployeeId,
-                event.meetingEmployeeLName,
                 event.shiftEndSummary,
-                event.surgeryEmployeeFName,
                 event.surgeryEmployeeId,
-                event.surgeryEmployeeLName,
                 event.surgeryFloor,
-                event.surgeryGroupCode,
                 event.surgeryGroupId,
-                event.surgeryGroupName,
+                event.surgeryGroupRole,
                 event.surgeryRoomNumber);
     }
 }

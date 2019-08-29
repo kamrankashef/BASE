@@ -235,26 +235,6 @@ public abstract class AbstractModel
         return this.uuid;
     }
 
-    @Deprecated
-    final public void addModelMethodGenerator(final ModelGen.ModelMethodGenerator modelMethodGenerator) {
-        this.modelGenerators.add(modelMethodGenerator);
-    }
-
-    @Deprecated
-    final public List<ModelGen.ModelMethodGenerator> getModelGenerators() {
-        return Collections.unmodifiableList(this.modelGenerators);
-    }
-
-    @Deprecated
-    final public void addDLMethodGenerator(final DLGen.DLMethodGenerator modelMethodGenerator) {
-        this.dlGenerators.add(modelMethodGenerator);
-    }
-
-    @Deprecated
-    final public List<DLGen.DLMethodGenerator> getDLMethodGenerators() {
-        return this.dlGenerators;
-    }
-
     public List<AbstractField> allOriginalFields() {
         final List<AbstractField> all = new LinkedList<>();
         all.add(getGuidField());

@@ -2,7 +2,6 @@ package base.util;
 
 import base.gen.DLGen;
 import base.gen.ModelGen;
-import base.parsergen.rules.ModelAugmenterI;
 import base.model.AbstractModel;
 import base.model.Model;
 import base.model.PrimitiveField;
@@ -14,44 +13,18 @@ public class AdjoinModelUtil {
     final public String org;
 
     // TODO Can this be removed?  Definitely seems like it
-    final private ModelAugmenterI modelAugmenter;
-    final Set<ModelGen.ModelMethodGenerator> mergedModelMethods;
-    final Set<DLGen.DLMethodGenerator> mergedDLMethods;
     final boolean keepInheritConstraints;
 
     public AdjoinModelUtil(
-            final String org,
-            final ModelAugmenterI modelAugmenter,
-            final Set<ModelGen.ModelMethodGenerator> mergedModelMethods,
-            final Set<DLGen.DLMethodGenerator> mergedDLMethods) {
-        this(org, modelAugmenter, mergedModelMethods, mergedDLMethods, true);
+            final String org) {
+        this(org, true);
     }
 
     public AdjoinModelUtil(
             final String org,
-            final ModelAugmenterI modelAugmenter,
-            final Set<ModelGen.ModelMethodGenerator> mergedModelMethods,
-            final Set<DLGen.DLMethodGenerator> mergedDLMethods,
             final boolean inheritConstraint) {
         this.org = org;
-        this.modelAugmenter = modelAugmenter;
-        this.mergedModelMethods = mergedModelMethods;
-        this.mergedDLMethods = mergedDLMethods;
         this.keepInheritConstraints = inheritConstraint;
-    }
-
-    // TODO - Seems like the model and laying generators should
-    // be independent operations.
-    public void addDLAndModelMethods(final AbstractModel model) {
-
-        for (final ModelGen.ModelMethodGenerator mmg : mergedModelMethods) {
-            model.addModelMethodGenerator(mmg);
-        }
-
-        for (final DLGen.DLMethodGenerator dmg : mergedDLMethods) {
-            model.addDLMethodGenerator(dmg);
-        }
-
     }
 
     public AbstractModel adjoinFields(final String tranlastedBaseName,
@@ -74,8 +47,6 @@ public class AdjoinModelUtil {
         for (final PrimitiveField field : fields) {
             model.addPrimitiveField(field);
         }
-
-        addDLAndModelMethods(model);
 
         return model;
     }
@@ -107,17 +78,14 @@ public class AdjoinModelUtil {
         for (int i = 0; i < modelNames.length; i++) {
             final AbstractModel model = models.get(modelNames[i]);
             if(model == null) {
-                System.out.println("Model at index " + i + " with name " + modelNames[i] + " is null");
+                throw new IllegalArgumentException("Model at index " + i + " with name " + modelNames[i] + " is null");
             }
             modelsArr[i] = model;
         }
 
         final AbstractModel model = new Model(modelsArr, prefixes, keepInheritConstraints, org, newName, fieldsArr, fields);
 
-        addDLAndModelMethods(model);
-
         return model;
-
     }
 
     // Base adjoin 2
@@ -136,8 +104,6 @@ public class AdjoinModelUtil {
                 org,
                 newName, fieldsArr, fields);
 
-        addDLAndModelMethods(model);
-
         return model;
     }
 
@@ -153,7 +119,6 @@ public class AdjoinModelUtil {
         }
 
         final AbstractModel model = new Model(new AbstractModel[]{models.get(tranlastedBaseName)}, new String[]{""}, keepInheritConstraints, org, newName, fieldsArr, fields);
-        addDLAndModelMethods(model);
         return model;
     }
 

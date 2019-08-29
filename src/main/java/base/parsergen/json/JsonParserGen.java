@@ -23,13 +23,7 @@ import com.google.gson.Gson;
 import kamserverutils.common.util.FileUtil;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class JsonParserGen {
 
@@ -121,12 +115,14 @@ public class JsonParserGen {
             }
 
             final AbstractModel model = new Model(modelName, ORG, primitiveFields);
-            model.addModelMethodGenerator(new ConstructorGenerator());
-            model.addModelMethodGenerator(new FromObjectMapGenerator());
-            model.addModelMethodGenerator(new ToStringGenerator());
             model.applyAugmented(MODEL_AUGMENTER);
             modelMap.put(modelName, model);
         }
+
+        final Set<ModelGen.ModelMethodGenerator> elemModelMethods = new HashSet<>();
+        elemModelMethods.add(new ConstructorGenerator());
+        elemModelMethods.add(new FromObjectMapGenerator());
+        elemModelMethods.add(new ToStringGenerator());
 
         final Map<String, String> additionalJavaFiles = Collections.EMPTY_MAP;
         final ModelTransformerI modelTransformer = ModelTransformerI.getSimplePassThroughElemTransformer(modelMap.keySet(),
@@ -156,6 +152,7 @@ public class JsonParserGen {
                 additionalJavaFiles,
                 MODEL_AUGMENTER,
                 modelTransformer,
+                elemModelMethods,
                 mergedModelMethods,
                 mergedDLMethods,
                 mainsBuildXML,

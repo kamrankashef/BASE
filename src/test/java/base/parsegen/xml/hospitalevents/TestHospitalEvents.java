@@ -61,43 +61,28 @@ public class TestHospitalEvents extends XMLGenTest {
                     final PrimitiveField customAttribute = new PrimitiveField("customAttribute", PrimitiveType.TINY_TEXT);
 
                     final List<AbstractModel> derivedModels = new LinkedList<>();
-                    final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, modelAugmenter, mergedModelMethods, mergedDLMethods, preserveConstraints);
+                    final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, preserveConstraints);
 
-                    final String meetingName = "ZMeeting";
-                    final String surgeryName = "ZSurgery";
-
-                    final Map<String, AbstractModel> eventSubModels = new HashMap<>();
-
-
-                    {
-                        final String[] modelNames = {"Meeting", "Employee"};
-                        final String[] prefixes = {"", "Employee"};
-                        final AbstractModel meeting = adjoinModelUtil.adjoinModels(modelNames, prefixes, meetingName, models);
-                        // TODO This might not be needed any longer
-                        meeting.getDLMethodGenerators().clear();
-                        eventSubModels.put(meetingName, meeting);
-                        derivedModels.add(meeting);
-                    }
-                    {
-                        final String[] modelNames = {"Surgery", "Group", "Employee"};
-                        final String[] prefixes = {"", "Group", "Employee"};
-                        final AbstractModel surgery = adjoinModelUtil.adjoinModels(modelNames, prefixes, surgeryName, models);
-                        // TODO This might not be needed any longer
-                        surgery.getDLMethodGenerators().clear();
-                        eventSubModels.put(surgeryName, surgery);
-                        derivedModels.add(surgery);
-                    }
-
-                    final String[] modelNames = {"Event", "ShiftEnd", meetingName, surgeryName};
-                    final String[] prefixes = {"Event", "ShiftEnd", "Meeting", "Surgery"};
-
-                    // Models that can be adjoined as auto-built
-                    eventSubModels.put("ShiftEnd", models.get("ShiftEnd"));
-                    eventSubModels.put("Event", models.get("Event"));
+                    // Use the echoed model heirachy to determine how to stitch Elem Models into Derived Models
+                    // Xml:
+                    //    HospitalEvents: Date, EasternTimeZoneTime, Filename, Id, LocalTime, LocalTimeZone
+                    //       ErRotation: Hospital, Id
+                    //          Group: Code, Id, Name
+                    //             EmployeesEmpty:
+                    //                Employee: FName, Id, LName
+                    //          Event: EasternTimeZoneTime, Id, LocalDate, LocalTime, Name, Number
+                    //             ShiftEnd: Summary
+                    //             Meeting: Description
+                    //                EmployeeMeeting: Id
+                    //             Surgery: Floor, RoomNumber
+                    //                GroupSurgery: Id, Role
+                    //                   EmployeeGroupSurgery: Id
+                    final String[] prefixes = {"Event", "ShiftEnd", "Meeting", "MeetingEmployee", "Surgery", "SurgeryGroup", "SurgeryEmployee"};
+                    final String[] modelNames = {"Event", "ShiftEnd", "Meeting", "EmployeeMeeting", "Surgery", "GroupSurgery", "EmployeeGroupSurgery"};
 
                     final AbstractModel adjoinedModel
                             = adjoinModelUtil.adjoinModels(
-                            modelNames, prefixes, "Event", eventSubModels, customAttribute);
+                            modelNames, prefixes, "Event", models, customAttribute);
 
                     derivedModels.add(adjoinedModel);
 

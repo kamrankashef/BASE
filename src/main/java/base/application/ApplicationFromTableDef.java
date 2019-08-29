@@ -70,6 +70,7 @@ public class ApplicationFromTableDef {
                 ModelAugmenterI.EMPTY_AUGMENTER,
                 ModelTransformerI.getSimplePassThroughElemTransformer(models.keySet()),
                 Collections.singleton(new ConstructorGenerator()),
+                Collections.singleton(new ConstructorGenerator()),
                 dlMethods,
                 "",
                 "/tmp");

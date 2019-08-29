@@ -82,7 +82,7 @@ public class TestPlayerScoutingCSV extends CSVGenTest {
             ModelUtil.fieldLookup(models.get("PlayerScoutingFeed"), "defense").setPrimitiveType(PrimitiveType.MEDIUM_TEXT);
             ModelUtil.fieldLookup(models.get("PlayerScoutingFeed"), "knicksFit").setPrimitiveType(PrimitiveType.MEDIUM_TEXT);
             ModelUtil.fieldLookup(models.get("PlayerScoutingFeed"), "reportDate").setNullable(true);
-            final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, modelAugmenter, mergedModelMethods, mergedDLMethods, true);
+            final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, true);
 
             derivedModels.add(adjoinModelUtil.adjoinFields("PlayerScoutingFeed", "PlayerScouting", models));
             return derivedModels;

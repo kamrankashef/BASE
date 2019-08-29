@@ -31,7 +31,7 @@ public interface ModelTransformerI {
                 final ModelAugmenterI modelAugmenter,
                 final Set<ModelGen.ModelMethodGenerator> mergedModelMethods,
                 final Set<DLGen.DLMethodGenerator> mergedDLMethods) -> {
-            final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, modelAugmenter, mergedModelMethods, mergedDLMethods, true);
+            final AdjoinModelUtil adjoinModelUtil = new AdjoinModelUtil(pkg, true);
 
             final List<AbstractModel> derivedModels = new LinkedList<>();
 

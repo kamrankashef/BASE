@@ -77,13 +77,10 @@ public abstract class AbstractBuilderFromSource {
                 + "  </target>\n\n";
     }
 
+    // TODO This may be the only interesting thing this class does now.  Perhaps roll it into the critical path.
     final protected void applyAugmentAndMethods() {
         for (final AbstractModel model : getElemModels()) {
             model.applyAugmented(parseRuleSet.modelAugmenter);
-
-            for (final ModelGen.ModelMethodGenerator modelMethodGen : parseRuleSet.elemModelMethods) {
-                model.addModelMethodGenerator(modelMethodGen);
-            }
         }
     }
 
