@@ -8,6 +8,7 @@ import base.model.Model;
 import base.model.PrimitiveField;
 import base.model.PrimitiveType;
 import base.model.methodgenerators.ConstructorGenerator;
+import base.model.sql.MySql;
 import base.parsergen.rules.ModelAugmenterI;
 import base.parsergen.rules.ModelTransformerI;
 import kamserverutils.common.util.FileUtil;
@@ -73,6 +74,7 @@ public class ApplicationFromTableDef {
                 Collections.singleton(new ConstructorGenerator()),
                 dlMethods,
                 "",
+                new MySql(),
                 "/tmp");
 
         System.out.println(app.toJson());

@@ -2,6 +2,7 @@ package base.gen;
 
 import base.model.AbstractField;
 import base.model.AbstractModel;
+import base.model.sql.DBVendorI;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,16 +12,10 @@ import java.util.stream.Stream;
 
 public class SchemaGen {
 
-    final private DBVendor dbVendor;
+    final private DBVendorI dbVendor;
 
-    public SchemaGen(final DBVendor dbVendor) {
+    public SchemaGen(final DBVendorI dbVendor) {
         this.dbVendor = dbVendor;
-    }
-
-    public enum DBVendor {
-        MYSQL,
-        POSTGRES,
-        SQLSERVER
     }
 
     final public String buildSchema(final String databaseName,
@@ -52,33 +47,30 @@ public class SchemaGen {
     final private String toSQLDef(final AbstractModel model) {
         final SourceBuilder bldr = new SourceBuilder();
 
-        if (dbVendor.equals(DBVendor.POSTGRES)) {
-            bldr.append("DROP TABLE IF EXISTS ").append(model.toDBName()).appendln(";")
-                    .appendln();
-        }
+        bldr.append(dbVendor.dropIfExists(model.toDBName()));
+
 
         bldr.append("CREATE TABLE ")
                 .append(model.toDBName()).appendln(" (");
         bldr.append(" ")
-                .append(model.getGuidField().toDBRow())
+                .append(model.getGuidField().toDBRow(dbVendor))
                 .appendln(" PRIMARY KEY");
-//                .appendln();
 
         for (final AbstractField field : model.getFkFields()) {
-            bldr.append(",").append(field.toDBRow()).appendln();
+            bldr.append(",").append(field.toDBRow(dbVendor)).appendln();
         }
         for (final AbstractField field : model.getPrimitiveFieldsWithLinked()) {
-            bldr.append(",").append(field.toDBRow()).appendln();
+            bldr.append(",").append(field.toDBRow(dbVendor)).appendln();
         }
         for (final AbstractField field : model.getAugmentedFields().keySet()) {
-            bldr.append(",").append(field.toDBRow()).appendln();
+            bldr.append(",").append(field.toDBRow(dbVendor)).appendln();
         }
 
         bldr.appendln(
                 ",created_at TIMESTAMP NULL DEFAULT NULL")
                 .appendln(",modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
                 .appendln(",deleted_at TIMESTAMP NULL DEFAULT NULL")
-                .append(")").append(dbVendor.equals(DBVendor.MYSQL) ? " ENGINE=InnoDB" : "").appendln(";");
+                .append(")").append(dbVendor.tableSuffix()).appendln(";");
 
         bldr.appendln("-- Indexes");
         for (final List<AbstractField> key : model.getKeys()) {

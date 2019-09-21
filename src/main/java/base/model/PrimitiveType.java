@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 public enum PrimitiveType {
 
+    // TODO Should sqlType be eliminated an completely owned by DBVendorI?
     // Todo use a convention instread of all these method names
     LONG_TEXT(null, "setNullableString", "getNullableString", "getString", "VARCHAR(1000000)", "String", new String[0]),
     MEDIUM_TEXT(LONG_TEXT, "setNullableString", "getNullableString", "getString", "VARCHAR(40000)", "String", new String[0]),
@@ -60,7 +61,7 @@ public enum PrimitiveType {
     @SerializedName("extract_method")
     public final String extractMethod;
 
-    private PrimitiveType(
+    PrimitiveType(
             final PrimitiveType parentType,
             final String setNullableMethod,
             final String getNullableMethod,
@@ -75,6 +76,10 @@ public enum PrimitiveType {
         this.extractMethod = extractMethod;
         this.javaTypeName = javaTypeName;
         this.requiredImports = requiredImports;
+    }
+
+    public String getSqlType() {
+        return sqlType;
     }
 
     final private static Pattern TYPE_PATTERN = Pattern.compile("([a-zA-Z]+)\\(([0-9]+)\\)");

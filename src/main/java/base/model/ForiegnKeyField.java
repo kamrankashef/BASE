@@ -1,5 +1,6 @@
 package base.model;
 
+import base.model.sql.DBVendorI;
 import com.google.gson.annotations.SerializedName;
 import java.util.Set;
 
@@ -20,25 +21,25 @@ public class ForiegnKeyField extends AbstractField {
     }
 
     @Override
-    public String toDBRow() {
+    public String toDBRow(final DBVendorI dbVendor) {
 
         final String fkTable = fkModel.toDBName();
+        // TODO Change to UUID
         final String fkRefName = fkTable + "_guid";
+
+        return dbVendor.fkField(fkRefName, fkTable, fkRefName, this.nullable(), this.onDeleteCascade);
         
-        String returnStr
-                = fkRefName + " " + PrimitiveType.CHAR_36.sqlType + (nullable() ? "" : " NOT NULL") +"\n"
-                + ",FOREIGN KEY (" + fkRefName + ")"
-                + " REFERENCES " + fkTable + "(" + fkRefName +")";
-        
-        if (this.onDeleteCascade) {
-            returnStr += " ON DELETE CASCADE";
-        }
-        return returnStr;
+
     }
 
     @Override
     public String toJavaType() {
         return "String";
+    }
+
+    @Override
+    public PrimitiveType getPrimitiveType() {
+        return PrimitiveType.CHAR_36;
     }
 
     @Override

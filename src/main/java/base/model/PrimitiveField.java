@@ -1,11 +1,14 @@
 package base.model;
 
+import base.model.sql.DBVendorI;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
+// TODO This with Abstract field are a mess, clean them up
+// TODO Distinction between Primitive and Abstract fields serves no purpose, merge them
 public class PrimitiveField extends AbstractField {
 
     @SerializedName("primitive_type")
@@ -84,9 +87,8 @@ public class PrimitiveField extends AbstractField {
     }
 
     @Override
-    public String toDBRow() {
-        return this.toDBName() + " " + primitiveType.sqlType
-                + (nullable() ? "" : " NOT NULL");
+    public String toDBRow(final DBVendorI dbVendor) {
+        return dbVendor.toDBRow(this.toDBName(), primitiveType, this.nullable());
     }
 
     @Override

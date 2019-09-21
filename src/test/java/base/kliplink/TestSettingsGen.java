@@ -16,6 +16,7 @@ import base.model.PrimitiveType;
 import base.model.methodgenerators.ConstructorGenerator;
 import base.model.methodgenerators.DerivedModelConstructorGenerator;
 import base.model.methodgenerators.ToStringGenerator;
+import base.model.sql.MySql;
 import base.parsergen.rules.ModelAugmenterI;
 import base.parsergen.rules.ModelTransformerI;
 import base.util.FileUtil;
@@ -95,6 +96,7 @@ public class TestSettingsGen {
                 mergedModelMethods,
                 mergedDLMethods,
                 mainsBuildXML,
+                new MySql(),
                 EXPORT_DIR);
     }
 }

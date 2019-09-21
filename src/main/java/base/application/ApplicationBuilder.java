@@ -5,6 +5,8 @@ import base.gen.APIGen;
 import base.gen.DLGen;
 import base.gen.ModelGen;
 import base.gen.SchemaGen;
+import base.model.sql.DBVendorI;
+import base.model.sql.MySql;
 import base.parsergen.rules.ModelAugmenterI;
 import base.parsergen.rules.ModelTransformerI;
 import base.model.CRUDAction;
@@ -159,6 +161,7 @@ public class ApplicationBuilder {
             final Set<ModelGen.ModelMethodGenerator> mergedModelMethods,
             final Set<DLGen.DLMethodGenerator> mergedDLMethods,
             final String mainsBuildXML,
+            final DBVendorI dbVendor,
             final String exportDir) throws IOException {
 
         final List<AbstractModel> elemModels
@@ -171,7 +174,7 @@ public class ApplicationBuilder {
         final Map<String, String> genFiles = ApplicationBuilder.buildClasses(elemModels, elemModelMethods, derivedModels, mergedModelMethods, new LinkedList<>(mergedDLMethods), false);
         genFiles.putAll(FileI.allBuildFile(org));
 
-        final SchemaGen schemaGen = new SchemaGen(SchemaGen.DBVendor.MYSQL);
+        final SchemaGen schemaGen = new SchemaGen(dbVendor);
         final String appName = "application";
         final String schema = schemaGen.buildSchema(appName, derivedModels);
         if(schema.isEmpty()) {
