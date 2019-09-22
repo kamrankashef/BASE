@@ -2,6 +2,7 @@ package base.gen;
 
 import base.model.AbstractField;
 import base.model.AbstractModel;
+import base.model.PrimitiveType;
 import base.model.sql.DBVendorI;
 
 import java.util.Collection;
@@ -66,11 +67,15 @@ public class SchemaGen {
             bldr.append(",").append(field.toDBRow(dbVendor)).appendln();
         }
 
-        bldr.appendln(
-                ",created_at TIMESTAMP NULL DEFAULT NULL")
-                .appendln(",modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-                .appendln(",deleted_at TIMESTAMP NULL DEFAULT NULL")
-                .append(")").append(dbVendor.tableSuffix()).appendln(";");
+        bldr.append(",")
+                .appendln(dbVendor.toDBRow("created_at", PrimitiveType.TIMESTAMP, true))
+                .append(",")
+                // TODO Remove the additional " "
+                .appendln(dbVendor.toDBRow("modified_at", PrimitiveType.TIMESTAMP, true))
+                .append(",")
+                .appendln(dbVendor.toDBRow("deleted_at", PrimitiveType.TIMESTAMP, true))
+                .append(")")
+                .append(dbVendor.tableSuffix()).appendln(";");
 
         bldr.appendln("-- Indexes");
         for (final List<AbstractField> key : model.getKeys()) {

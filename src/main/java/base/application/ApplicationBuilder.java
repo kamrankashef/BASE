@@ -68,38 +68,9 @@ public class ApplicationBuilder {
 
     }
 
-    public static int convertToSqlServer(final String exportDir,
-            final String dest) throws IOException, InterruptedException {
-
-        final String[] cmdArr = {
-            BASE_HOME
-            + "/scripts/aux_scripts"
-            + "/vendor_migration/mysql_to_sql_server/schema_migrate.sh",
-            exportDir,
-            dest};
-
-        final Process p = Runtime.getRuntime().exec(cmdArr);
-
-        String line;
-        try(BufferedReader stdInput = new BufferedReader(new InputStreamReader(
-                p.getInputStream()))) {
-            while ((line = stdInput.readLine()) != null) {
-                System.out.println(">> " + line + "\n");
-            }
-        }
-        p.waitFor();
-
-        return p.exitValue();
-
-    }
-
-    // private final ApplicationDescription application;
 
     final private static String SRC_DIR = "src/main/java";
 
-    // public ApplicationBuilder(final ApplicationDescription application) {
-    //    this.application = application;
-    // }
 
     public static Map<String, String> buildClasses(final Collection<AbstractModel> elemModels,
                                             final Collection<ModelGen.ModelMethodGenerator> elemModelMethods,

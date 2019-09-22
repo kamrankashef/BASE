@@ -185,13 +185,6 @@ public abstract class AbstractApplicationBuilder {
                 getDBVendor(),
                 exportDir);
 
-        // This needs to be driven by target SQL schema
-        ApplicationBuilder.convertToSqlServer(
-                this.exportDir
-                        + "/application/sql/schema.sql",
-                this.exportDir
-                        + "/application/sql/schema.sql");
-
     }
 
 }

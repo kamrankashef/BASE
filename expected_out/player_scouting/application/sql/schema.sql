@@ -67,7 +67,7 @@ CREATE TABLE player_scouting (
 ,tov INT
 ,weight INT
 ,created_at DATETIMEOFFSET NULL DEFAULT NULL
-,modified_at DATETIMEOFFSET 
+,modified_at DATETIMEOFFSET NULL DEFAULT NULL
 ,deleted_at DATETIMEOFFSET NULL DEFAULT NULL
 );
 -- Indexes

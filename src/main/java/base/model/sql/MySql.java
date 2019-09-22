@@ -6,7 +6,8 @@ public class MySql implements DBVendorI {
 
     @Override
     public String toPropType(final PrimitiveType primitiveType) {
-
+    //    switch (primitiveType) {
+    //    }
         return primitiveType.getSqlType();
     }
 

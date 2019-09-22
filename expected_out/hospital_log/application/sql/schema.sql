@@ -25,7 +25,7 @@ CREATE TABLE event (
 ,surgery_group_role NVARCHAR(1024)
 ,surgery_room_number NVARCHAR(1024)
 ,created_at DATETIMEOFFSET NULL DEFAULT NULL
-,modified_at DATETIMEOFFSET 
+,modified_at DATETIMEOFFSET NULL DEFAULT NULL
 ,deleted_at DATETIMEOFFSET NULL DEFAULT NULL
 );
 -- Indexes
