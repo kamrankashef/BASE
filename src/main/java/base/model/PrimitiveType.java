@@ -7,15 +7,16 @@ import java.util.regex.Pattern;
 
 public enum PrimitiveType {
 
+    // TODO Should sqlType be eliminated an completely owned by DBVendorI?
     // Todo use a convention instread of all these method names
-    LONG_TEXT(null, "setNullableString", "getNullableString", "getString", "VARCHAR(1000000)", "String", new String[0]),
-    MEDIUM_TEXT(LONG_TEXT, "setNullableString", "getNullableString", "getString", "VARCHAR(40000)", "String", new String[0]),
-    TEXT_2048(MEDIUM_TEXT, "setNullableString", "getNullableString", "getString", "VARCHAR(2048)", "String", new String[0]),
-    TEXT(TEXT_2048, "setNullableString", "getNullableString", "getString", "VARCHAR(1024)", "String", new String[0]),
-    SMALL_TEXT(MEDIUM_TEXT, "setNullableString", "getNullableString", "getString", "VARCHAR(512)", "String", new String[0]),
-    TINY_TEXT(SMALL_TEXT, "setNullableString", "getNullableString", "getString", "VARCHAR(128)", "String", new String[0]),
-    CHAR_36(TINY_TEXT, "setNullableString", "getNullableString", "getString", "CHAR(36)", "String", new String[0]),
-    CHAR_10(CHAR_36, "setNullableString", "getNullableString", "getString", "CHAR(10)", "String", new String[0]),
+    LONG_TEXT(null, "setNullableString", "getNullableString", "getString", "VARCHAR(1000000)", "String", new String[0], 1000000),
+    MEDIUM_TEXT(LONG_TEXT, "setNullableString", "getNullableString", "getString", "VARCHAR(40000)", "String", new String[0], 40000),
+    TEXT_2048(MEDIUM_TEXT, "setNullableString", "getNullableString", "getString", "VARCHAR(2048)", "String", new String[0], 2048),
+    TEXT(TEXT_2048, "setNullableString", "getNullableString", "getString", "VARCHAR(1024)", "String", new String[0], 1024),
+    SMALL_TEXT(MEDIUM_TEXT, "setNullableString", "getNullableString", "getString", "VARCHAR(512)", "String", new String[0], 512),
+    TINY_TEXT(SMALL_TEXT, "setNullableString", "getNullableString", "getString", "VARCHAR(128)", "String", new String[0], 128),
+    CHAR_36(TINY_TEXT, "setNullableString", "getNullableString", "getString", "CHAR(36)", "String", new String[0], 36),
+    CHAR_10(CHAR_36, "setNullableString", "getNullableString", "getString", "CHAR(10)", "String", new String[0], 10),
     //
     // Boolean types
     BOOLEAN(TINY_TEXT, "setNullableBoolean", "getNullableBoolean", "getBoolean", "BOOLEAN", "Boolean", new String[0]),
@@ -37,6 +38,8 @@ public enum PrimitiveType {
     TINYINT(SMALLINT, "setNullableInt", "getNullableInt", "getInteger", "TINYINT", "Integer", new String[0]),
     //
     // Date Types
+    TIMESTAMP_NOW_ON_UPDATE(TINY_TEXT, "setNullableTimestamp", "getNullableDate", "getDate", "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+            "Date", new String[]{"java.util.Date"}),
     TIMESTAMP_FRACTION_3(TINY_TEXT, "setNullableTimestamp", "getNullableDate", "getDate", "TIMESTAMP(3) NULL DEFAULT NULL", "Date", new String[]{"java.util.Date"}),
     TIMESTAMP(TIMESTAMP_FRACTION_3, "setNullableTimestamp", "getNullableDate", "getDate", "TIMESTAMP NULL DEFAULT NULL", "Date", new String[]{"java.util.Date"}),
     DATE(TIMESTAMP, "setNullableTimestamp", "getNullableDate", "getDate", "DATE NULL DEFAULT NULL", "Date", new String[]{"java.util.Date"}),
@@ -59,15 +62,18 @@ public enum PrimitiveType {
     public final String getNullableMethod;
     @SerializedName("extract_method")
     public final String extractMethod;
+    @SerializedName("size")
+    public final int size;
 
-    private PrimitiveType(
+    PrimitiveType(
             final PrimitiveType parentType,
             final String setNullableMethod,
             final String getNullableMethod,
             final String extractMethod,
             final String sqlType,
             final String javaTypeName,
-            final String[] requiredImports) {
+            final String[] requiredImports,
+            final int size) {
         this.parentType = parentType;
         this.sqlType = sqlType;
         this.setNullableMethod = setNullableMethod;
@@ -75,6 +81,28 @@ public enum PrimitiveType {
         this.extractMethod = extractMethod;
         this.javaTypeName = javaTypeName;
         this.requiredImports = requiredImports;
+        this.size = size;
+    }
+    PrimitiveType(
+            final PrimitiveType parentType,
+            final String setNullableMethod,
+            final String getNullableMethod,
+            final String extractMethod,
+            final String sqlType,
+            final String javaTypeName,
+            final String[] requiredImports) {
+        this(parentType,
+                setNullableMethod,
+                getNullableMethod,
+                extractMethod,
+                sqlType,
+                javaTypeName,
+                requiredImports,
+                -1);
+    }
+
+    public String getSqlType() {
+        return sqlType;
     }
 
     final private static Pattern TYPE_PATTERN = Pattern.compile("([a-zA-Z]+)\\(([0-9]+)\\)");

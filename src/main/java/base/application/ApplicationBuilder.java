@@ -5,6 +5,8 @@ import base.gen.APIGen;
 import base.gen.DLGen;
 import base.gen.ModelGen;
 import base.gen.SchemaGen;
+import base.model.sql.DBVendorI;
+import base.model.sql.MySql;
 import base.parsergen.rules.ModelAugmenterI;
 import base.parsergen.rules.ModelTransformerI;
 import base.model.CRUDAction;
@@ -66,38 +68,9 @@ public class ApplicationBuilder {
 
     }
 
-    public static int convertToSqlServer(final String exportDir,
-            final String dest) throws IOException, InterruptedException {
-
-        final String[] cmdArr = {
-            BASE_HOME
-            + "/scripts/aux_scripts"
-            + "/vendor_migration/mysql_to_sql_server/schema_migrate.sh",
-            exportDir,
-            dest};
-
-        final Process p = Runtime.getRuntime().exec(cmdArr);
-
-        String line;
-        try(BufferedReader stdInput = new BufferedReader(new InputStreamReader(
-                p.getInputStream()))) {
-            while ((line = stdInput.readLine()) != null) {
-                System.out.println(">> " + line + "\n");
-            }
-        }
-        p.waitFor();
-
-        return p.exitValue();
-
-    }
-
-    // private final ApplicationDescription application;
 
     final private static String SRC_DIR = "src/main/java";
 
-    // public ApplicationBuilder(final ApplicationDescription application) {
-    //    this.application = application;
-    // }
 
     public static Map<String, String> buildClasses(final Collection<AbstractModel> elemModels,
                                             final Collection<ModelGen.ModelMethodGenerator> elemModelMethods,
@@ -159,6 +132,7 @@ public class ApplicationBuilder {
             final Set<ModelGen.ModelMethodGenerator> mergedModelMethods,
             final Set<DLGen.DLMethodGenerator> mergedDLMethods,
             final String mainsBuildXML,
+            final DBVendorI dbVendor,
             final String exportDir) throws IOException {
 
         final List<AbstractModel> elemModels
@@ -171,7 +145,7 @@ public class ApplicationBuilder {
         final Map<String, String> genFiles = ApplicationBuilder.buildClasses(elemModels, elemModelMethods, derivedModels, mergedModelMethods, new LinkedList<>(mergedDLMethods), false);
         genFiles.putAll(FileI.allBuildFile(org));
 
-        final SchemaGen schemaGen = new SchemaGen(SchemaGen.DBVendor.MYSQL);
+        final SchemaGen schemaGen = new SchemaGen(dbVendor);
         final String appName = "application";
         final String schema = schemaGen.buildSchema(appName, derivedModels);
         if(schema.isEmpty()) {

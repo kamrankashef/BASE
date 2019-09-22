@@ -2,6 +2,7 @@ package base.model;
 
 import base.lang.JavaSyntax;
 import base.lang.LanguageSyntaxI;
+import base.model.sql.DBVendorI;
 import base.util.CaseConversion;
 import com.google.gson.annotations.SerializedName;
 
@@ -22,6 +23,8 @@ public abstract class AbstractField
     public boolean userGenerated = true;
     @SerializedName("uuid")
     private final String uuid;
+
+    public abstract PrimitiveType getPrimitiveType();
 
     // TODO Factor this out and allow for injection of the syntax
     private LanguageSyntaxI languageSyntax = new JavaSyntax();
@@ -147,7 +150,7 @@ public abstract class AbstractField
 
     public abstract String toJavaType();
 
-    public abstract String toDBRow();
+    public abstract String toDBRow(DBVendorI dbVendor);
 
     public String toJavaDeclaration(final String prefix) {
         return "final " + this.toJavaType() + " " + toJavaVariableName(prefix);

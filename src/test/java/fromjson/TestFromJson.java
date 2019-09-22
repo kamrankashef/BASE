@@ -14,6 +14,7 @@ import base.model.AbstractModel;
 import base.model.methodgenerators.ConstructorGenerator;
 import base.model.methodgenerators.FromThirdPartyGenerator;
 import base.model.methodgenerators.ToStringGenerator;
+import base.model.sql.MySql;
 import base.workflow.Helpers;
 import kamserverutils.common.util.FileUtil;
 import fullsuite.FullSuite;
@@ -57,7 +58,7 @@ public class TestFromJson {
 //        final String bcHome = System.getenv("BUILD_COMMONS_HOME");
 //        runCommand(bcHome + "/bin/scaffolder.rb", "web", exportHome, "orgname,modfoo,1.0.2", "javax.mail,mail,1.4.5:com.google.guava,guava,18.0");
 //
-        final SchemaGen schemaGen = new SchemaGen(SchemaGen.DBVendor.MYSQL);
+        final SchemaGen schemaGen = new SchemaGen(new MySql());
         genFiles.put("web/WEB-INF/schema.sql", schemaGen.buildSchema(app.name.toLowerCase(), app.models));
         genFiles.put("web/js/api.js", JSAPIGen.buildJSAPI(app.models));
         ApplicationBuilder.fileExporter(exportDir, genFiles);

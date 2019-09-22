@@ -7,6 +7,9 @@ import base.gen.ModelGen;
 import base.model.AbstractModel;
 import base.model.Constraint;
 import base.model.PrimitiveField;
+import base.model.sql.DBVendorI;
+import base.model.sql.MySql;
+import base.model.sql.SqlServer;
 import base.parsergen.AbstractBuilderFromSource;
 import base.parsergen.rules.*;
 import base.parsergen.rules.impl.StatefulTypeSetGuesser;
@@ -123,6 +126,10 @@ public abstract class AbstractApplicationBuilder {
     }
 
 
+    public DBVendorI getDBVendor() {
+        return new SqlServer();
+    }
+
     // TODO This is a bit convoluted.  Make it clear that this is more of the pre-builder discovery phase
     protected abstract  AbstractBuilderFromSource getBuilderFromSource() throws IOException;
 
@@ -175,14 +182,8 @@ public abstract class AbstractApplicationBuilder {
                 this.mergedModelMethods,
                 this.dlMethods,
                 builder.getAntEntries().iterator().next(),
+                getDBVendor(),
                 exportDir);
-
-        // This needs to be driven by target SQL schema
-        ApplicationBuilder.convertToSqlServer(
-                this.exportDir
-                        + "/application/sql/schema.sql",
-                this.exportDir
-                        + "/application/sql/schema.sql");
 
     }
 
