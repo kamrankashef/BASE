@@ -70,7 +70,6 @@ public class SchemaGen {
         bldr.append(",")
                 .appendln(dbVendor.toDBRow("created_at", PrimitiveType.TIMESTAMP, true))
                 .append(",")
-                // TODO Remove the additional " "
                 .appendln(dbVendor.toDBRow("modified_at", PrimitiveType.TIMESTAMP, true))
                 .append(",")
                 .appendln(dbVendor.toDBRow("deleted_at", PrimitiveType.TIMESTAMP, true))
