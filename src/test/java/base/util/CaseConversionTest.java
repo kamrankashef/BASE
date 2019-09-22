@@ -46,11 +46,11 @@ public class CaseConversionTest {
         assertEquals("Ab", CaseConversion.toJavaClassName("AB"));
         assertEquals("I", CaseConversion.toJavaClassName("I"));
         assertEquals("I", CaseConversion.toJavaClassName("i"));
-        assertEquals("IFoo", CaseConversion.toJavaClassName("i_foo"));
-        assertEquals("PointsAgainstPg", CaseConversion.toJavaClassName("Points_Against_PG"));
-        assertEquals("HsState", CaseConversion.toJavaClassName("HS_state"));
+        assertEquals("I_foo", CaseConversion.toJavaClassName("i_foo"));
+        assertEquals("Points_Against_Pg", CaseConversion.toJavaClassName("Points_Against_PG"));
+        assertEquals("HS_state", CaseConversion.toJavaClassName("HS_state"));
         assertEquals("EventNum", CaseConversion.toJavaClassNameUnunderscore("Event_Num"));
-        assertEquals("EventNum", CaseConversion.toJavaClassNameUnunderscore("EventNum"));
+        assertEquals("Eventnum", CaseConversion.toJavaClassNameUnunderscore("EventNum"));
     }
 
     @Test
@@ -82,8 +82,8 @@ public class CaseConversionTest {
         assertEquals("firs__t__sx", CaseConversion.toDBName("Firs_T_Sx"));
 
         assertEquals("first__s", CaseConversion.toDBName("First_S"));
-        assertEquals("points_against_pg", CaseConversion.toDBName("Points_Against_PG"));
-        assertEquals("hs_state", CaseConversion.toDBName("HS_state"));
+        assertEquals("points_against_pg", CaseConversion.toDBName("PointsAgainstPG"));
+        assertEquals("hs_state", CaseConversion.toDBName("Hs_state"));
     }
 
     @Test
